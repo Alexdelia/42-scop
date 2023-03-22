@@ -4,5 +4,5 @@ mod state;
 fn main() {
     println!("Hello, world!");
 
-    graphic::window::run();
+    pollster::block_on(graphic::window::run());
 }
