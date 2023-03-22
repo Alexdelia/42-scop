@@ -1,4 +1,5 @@
-use winit::event::WindowEvent;
+use crate::setting::WINDOW_INIT_COLOR;
+
 use winit::window::Window;
 
 pub struct State {
@@ -8,6 +9,7 @@ pub struct State {
     config: wgpu::SurfaceConfiguration,
     pub size: winit::dpi::PhysicalSize<u32>,
     window: Window,
+    pub clear_color: wgpu::Color,
 }
 
 impl State {
@@ -84,6 +86,7 @@ impl State {
             config,
             size,
             window,
+            clear_color: WINDOW_INIT_COLOR,
         }
     }
 
@@ -124,12 +127,7 @@ impl State {
                     view: &view,
                     resolve_target: None,
                     ops: wgpu::Operations {
-                        load: wgpu::LoadOp::Clear(wgpu::Color {
-                            r: 1.0,
-                            g: 0.7,
-                            b: 0.6,
-                            a: 1.0,
-                        }),
+                        load: wgpu::LoadOp::Clear(self.clear_color),
                         store: true,
                     },
                 })],
