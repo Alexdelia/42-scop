@@ -1,15 +1,20 @@
+use crate::setting::WINDOW_TITLE;
 use crate::state::State;
 
 use winit::{
     event::*,
     event_loop::{ControlFlow, EventLoop},
-    window::WindowBuilder,
+    window::{Theme, WindowBuilder},
 };
 
 pub async fn run() {
     env_logger::init();
     let event_loop = EventLoop::new();
-    let window = WindowBuilder::new().build(&event_loop).unwrap();
+    let window = WindowBuilder::new()
+        .with_title(WINDOW_TITLE)
+        .with_theme(Some(Theme::Dark))
+        .build(&event_loop)
+        .unwrap();
 
     let mut state = State::new(window).await;
 
@@ -35,6 +40,17 @@ pub async fn run() {
                     }
                     WindowEvent::ScaleFactorChanged { new_inner_size, .. } => {
                         state.resize(**new_inner_size);
+                    }
+                    WindowEvent::CursorMoved {
+                        device_id,
+                        position,
+                        ..
+                    } => {
+                        eprintln!(
+                            "CursorMoved:\n\tdevice_id:\t{:?}\n\tposition:\t{:?}",
+                            device_id, position
+                        );
+                        // state.mouse_move(*position);
                     }
                     _ => {}
                 }

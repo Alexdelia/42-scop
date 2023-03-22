@@ -1,4 +1,6 @@
+mod event;
 mod graphic;
+mod setting;
 mod state;
 
 fn main() {

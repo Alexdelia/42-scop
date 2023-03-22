@@ -100,10 +100,6 @@ impl State {
         }
     }
 
-    pub fn input(&mut self, event: &WindowEvent) -> bool {
-        false
-    }
-
     pub fn update(&mut self) {
         // todo!()
     }
@@ -130,8 +126,8 @@ impl State {
                     ops: wgpu::Operations {
                         load: wgpu::LoadOp::Clear(wgpu::Color {
                             r: 1.0,
-                            g: 0.0,
-                            b: 0.0,
+                            g: 0.7,
+                            b: 0.6,
                             a: 1.0,
                         }),
                         store: true,
