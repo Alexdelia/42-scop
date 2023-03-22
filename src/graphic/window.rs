@@ -1,10 +1,11 @@
-use crate::setting::WINDOW_TITLE;
+use crate::setting::{WINDOW_ICON, WINDOW_TITLE};
 use crate::state::State;
 
+use std::path::Path;
 use winit::{
     event::*,
     event_loop::{ControlFlow, EventLoop},
-    window::{Theme, WindowBuilder},
+    window::{Icon, WindowBuilder},
 };
 
 pub async fn run() {
@@ -12,7 +13,7 @@ pub async fn run() {
     let event_loop = EventLoop::new();
     let window = WindowBuilder::new()
         .with_title(WINDOW_TITLE)
-        .with_theme(Some(Theme::Dark))
+        .with_window_icon(Some(load_icon(Path::new(WINDOW_ICON))))
         .build(&event_loop)
         .unwrap();
 
@@ -41,17 +42,6 @@ pub async fn run() {
                     WindowEvent::ScaleFactorChanged { new_inner_size, .. } => {
                         state.resize(**new_inner_size);
                     }
-                    WindowEvent::CursorMoved {
-                        device_id,
-                        position,
-                        ..
-                    } => {
-                        eprintln!(
-                            "CursorMoved:\n\tdevice_id:\t{:?}\n\tposition:\t{:?}",
-                            device_id, position
-                        );
-                        // state.mouse_move(*position);
-                    }
                     _ => {}
                 }
             }
@@ -75,4 +65,12 @@ pub async fn run() {
         }
         _ => {}
     });
+}
+
+fn load_icon(path: &Path) -> Icon {
+    let image = image::open(path)
+        .expect(format!("Failed to open icon path '{}'", path.display()).as_str())
+        .into_rgba8();
+    let (w, h) = image.dimensions();
+    Icon::from_rgba(image.into_raw(), w, h).expect("Failed to open icon")
 }
