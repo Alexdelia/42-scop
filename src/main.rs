@@ -1,7 +1,8 @@
 mod graphic;
+mod state;
 
 fn main() {
     println!("Hello, world!");
 
-    graphic::run();
+    graphic::window::run();
 }
