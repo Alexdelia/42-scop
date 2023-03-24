@@ -17,7 +17,7 @@ fn vs_main(
     out.vert_pos = vec3<f32>(
         smoothstep(-0.5, 0.5, out.vert_pos.x),
         smoothstep(-0.5, 0.5, out.vert_pos.y),
-        smoothstep(-0.5, 0.5, out.vert_pos.z)
+        smoothstep(1.0, -1.0, out.vert_pos.x + out.vert_pos.y)
     );
     return out;
 }
