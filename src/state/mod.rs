@@ -1,5 +1,7 @@
 use crate::setting::WINDOW_INIT_COLOR;
 
+use gpu::Render;
+
 use winit::window::Window;
 
 pub struct State {
@@ -9,9 +11,23 @@ pub struct State {
     device: wgpu::Device,
     queue: wgpu::Queue,
     config: wgpu::SurfaceConfiguration,
-    render_pipeline: wgpu::RenderPipeline,
-    pub clear_color: wgpu::Color,
+    render: Render,
 }
+
+pub const VERTICES: &[Vertex] = &[
+    Vertex {
+        position: [0.0, 0.5, 0.0],
+        color: [1.0, 0.0, 0.0],
+    },
+    Vertex {
+        position: [-0.5, -0.5, 0.0],
+        color: [0.0, 1.0, 0.0],
+    },
+    Vertex {
+        position: [0.5, -0.5, 0.0],
+        color: [0.0, 0.0, 1.0],
+    },
+];
 
 impl State {
     // creating some of the wgpu types requires async code
