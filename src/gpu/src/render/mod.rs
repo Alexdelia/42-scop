@@ -9,7 +9,11 @@ pub struct Render {
 }
 
 impl Render {
-    pub fn new(device: wgpu::Device) -> Self {
+    pub fn new(
+        device: &wgpu::Device,
+        surface_format: wgpu::TextureFormat,
+        bg_color: Option<wgpu::Color>,
+    ) -> Self {
         let shader = device.create_shader_module(wgpu::include_wgsl!("shader.wgsl"));
         let render_pipeline_layout =
             device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
@@ -29,7 +33,7 @@ impl Render {
                 module: &shader,
                 entry_point: "fs_main",
                 targets: &[Some(wgpu::ColorTargetState {
-                    format: config.format,
+                    format: surface_format,
                     blend: Some(wgpu::BlendState::REPLACE),
                     write_mask: wgpu::ColorWrites::ALL,
                 })],
@@ -54,5 +58,12 @@ impl Render {
             },
             multiview: None,
         });
+
+        Self {
+            render_pipeline,
+            bg_color: bg_color.unwrap_or(wgpu::Color::BLACK),
+            vertex_buffer: Buffer::new(),
+            index_buffer: Buffer::new(),
+        }
     }
 }

@@ -88,6 +88,8 @@ impl State {
             view_formats: vec![],
         };
 
+        let render = Render::new(&device, surface_format, Some(WINDOW_INIT_COLOR));
+
         let shader = device.create_shader_module(wgpu::include_wgsl!("shader.wgsl"));
         let render_pipeline_layout =
             device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
