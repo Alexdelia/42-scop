@@ -36,7 +36,7 @@ impl State {
     // will handle better and more events later
     fn cursor(&mut self, position: &PhysicalPosition<f64>) -> bool {
         // println!("CursorMoved:\n\tposition:\t{:?}", position);
-        self.clear_color = wgpu::Color {
+        self.render.bg_color = wgpu::Color {
             r: position.x as f64 / self.size.width as f64,
             g: position.y as f64 / self.size.height as f64,
             b: 0.0,
