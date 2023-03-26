@@ -1,8 +1,15 @@
+mod env;
+mod event;
+mod render;
 mod setting;
 mod window;
 
-fn main() {
+use yahmrslib::hmerr::Result;
+
+fn main() -> Result<()> {
     println!("Hello, world!");
 
-    window::run();
+    window::run()?;
+
+    Ok(())
 }
