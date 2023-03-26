@@ -3,13 +3,11 @@ name = "scop"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
-gpu = { path = "src/gpu" }
-env_logger = "0.10.0"
-image = "0.24.5"
-log = "0.4.17"
-pollster = "0.3.0"
-wgpu = "0.15.1"
-winit = "0.28.3"
+wgpu = "0.15.1"			# wgpu bind to vulkan / openGL / metal / DX12
+winit = "0.28.3"		# create window
+image = { version = "0.24.6", features = ["png"] }			# load image
+bytemuck = { version = "1.13.1", features = ["derive"] }	# convert struct to byte array
+pollster = "0.3.0"		# await main
+log = "0.4.17"			# api to access the wgpu logger
+env_logger = "0.10.0"	# in case of runtime error from wgpu, print the log

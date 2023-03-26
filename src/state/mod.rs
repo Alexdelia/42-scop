@@ -1,6 +1,4 @@
-use crate::setting::WINDOW_INIT_COLOR;
-
-use gpu::Render;
+use crate::gpu::render::Render;
 
 use winit::window::Window;
 
@@ -73,7 +71,7 @@ impl State {
             view_formats: vec![],
         };
 
-        let render = Render::new(&device, surface_format, Some(WINDOW_INIT_COLOR));
+        let render = Render::new(&device, surface_format);
 
         surface.configure(&device, &config);
 

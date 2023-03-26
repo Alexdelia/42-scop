@@ -1,9 +1,11 @@
 // mod buffer;
 // use buffer::Buffer;
 
-use wgpu::util::DeviceExt;
+use crate::setting::WINDOW_INIT_COLOR;
 
-use crate::vertex::Vertex;
+use super::vertex::Vertex;
+
+use wgpu::util::DeviceExt;
 
 const VERTICES: &[Vertex] = &[
     Vertex {
@@ -39,11 +41,7 @@ pub struct Render {
 }
 
 impl Render {
-    pub fn new(
-        device: &wgpu::Device,
-        surface_format: wgpu::TextureFormat,
-        bg_color: Option<wgpu::Color>,
-    ) -> Self {
+    pub fn new(device: &wgpu::Device, surface_format: wgpu::TextureFormat) -> Self {
         let shader = device.create_shader_module(wgpu::include_wgsl!("shader.wgsl"));
         let render_pipeline_layout =
             device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
@@ -104,7 +102,7 @@ impl Render {
 
         Self {
             render_pipeline,
-            bg_color: bg_color.unwrap_or(wgpu::Color::BLACK),
+            bg_color: WINDOW_INIT_COLOR,
             vertex_buffer,
             index_buffer,
             num_indices,
