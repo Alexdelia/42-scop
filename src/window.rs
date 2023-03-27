@@ -1,5 +1,6 @@
 // use crate::setting::FPS;
 use crate::env::Env;
+use crate::event::EventOut;
 
 use yahmrslib::hmerr::Result;
 
@@ -15,23 +16,18 @@ pub fn run() -> Result<()> {
     let cb = glutin::ContextBuilder::new();
     let display = glium::Display::new(wb, cb, &event_loop).unwrap();
 
-    event_loop.run(move |ev, _, control_flow| {
+    event_loop.run(move |event, _, control_flow| {
         // *control_flow = glutin::event_loop::ControlFlow::WaitUntil(next_frame());
         *control_flow = glutin::event_loop::ControlFlow::Poll;
 
-        env.event()?;
-        // need to return something special and handle control flow
-        // *control_flow = glutin::event_loop::ControlFlow::Exit;
-
-        match ev {
-            glutin::event::Event::WindowEvent { event, .. } => match event {
-                glutin::event::WindowEvent::CloseRequested => {
-                    *control_flow = glutin::event_loop::ControlFlow::Exit;
+        match env.event(event) {
+            EventOut::None => (),
+            EventOut::ControlFlow(cf) => {
+                *control_flow = cf;
+                if cf == glutin::event_loop::ControlFlow::Exit {
                     return;
                 }
-                _ => return,
-            },
-            _ => (),
+            }
         }
     });
 }
