@@ -20,18 +20,11 @@ pub fn run() -> Result<()> {
         // *control_flow = glutin::event_loop::ControlFlow::WaitUntil(next_frame());
         *control_flow = glutin::event_loop::ControlFlow::Poll;
 
-        match env.event(event) {
-            EventOut::None => (),
-            EventOut::ControlFlow(cf) => {
-                *control_flow = cf;
-                if cf == glutin::event_loop::ControlFlow::Exit {
-                    return;
-                }
+        if let EventOut::ControlFlow(cf) = env.event(event) {
+            *control_flow = cf;
+            if cf == glutin::event_loop::ControlFlow::Exit {
+                return;
             }
         }
     });
 }
-
-// fn next_frame() -> Instant {
-//     Instant::now() + Duration::from_nanos(1_000_000_000 / FPS as u64)
-// }
