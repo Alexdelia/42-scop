@@ -1,8 +1,13 @@
+use crate::color::Color;
 use crate::env::Env;
 
-use glium::glutin::{
-    event::{ElementState, Event, KeyboardInput, VirtualKeyCode, WindowEvent},
-    event_loop::ControlFlow,
+use glium::{
+    glutin::{
+        dpi::PhysicalPosition,
+        event::{ElementState, Event, KeyboardInput, VirtualKeyCode, WindowEvent},
+        event_loop::ControlFlow,
+    },
+    Surface,
 };
 
 pub enum EventOut {
@@ -11,11 +16,12 @@ pub enum EventOut {
 }
 
 impl Env {
-    pub fn event(&self, event: Event<()>) -> EventOut {
+    pub fn event(&mut self, event: Event<()>) -> EventOut {
         match event {
             Event::WindowEvent { event, .. } => match event {
                 WindowEvent::CloseRequested => return EventOut::ControlFlow(ControlFlow::Exit),
                 WindowEvent::KeyboardInput { input, .. } => self.key(input),
+                WindowEvent::CursorMoved { position, .. } => self.cursor(&position),
                 _ => EventOut::None,
             },
             _ => EventOut::None,
@@ -46,6 +52,19 @@ impl Env {
     }
 
     fn key_complex(&self, input: KeyboardInput) -> EventOut {
+        EventOut::None
+    }
+
+    // will handle better and more events later
+    fn cursor(&mut self, position: &PhysicalPosition<f64>) -> EventOut {
+        // println!("CursorMoved:\n\tposition:\t{:?}", position);
+        let (w, h) = self.display.get_framebuffer_dimensions();
+        self.setting.bg_color = Color {
+            r: position.x as f32 / w as f32,
+            g: position.y as f32 / h as f32,
+            b: 0.0,
+            a: 1.0,
+        };
         EventOut::None
     }
 }

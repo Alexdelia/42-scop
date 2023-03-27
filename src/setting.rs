@@ -1,18 +1,14 @@
+use crate::color::Color;
+
 use glium::glutin::event_loop::ControlFlow;
 
 use std::time::{Duration, Instant};
-
-// pub const WINDOW_INIT_COLOR: wgpu::Color = wgpu::Color {
-//     r: 1.0,
-//     g: 0.717647059,
-//     b: 0.77254902,
-//     a: 0.5,
-// };
 
 pub struct Setting {
     pub window_title: &'static str,
     pub window_icon: &'static str,
     fps: Option<u8>,
+    pub bg_color: Color,
 }
 
 impl Default for Setting {
@@ -21,6 +17,7 @@ impl Default for Setting {
             window_title: "scop",
             window_icon: "src/icon.png",
             fps: None,
+            bg_color: Color::new(1.0, 0.717647059, 0.77254902, 0.5),
         }
     }
 }
