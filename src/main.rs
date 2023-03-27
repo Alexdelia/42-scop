@@ -2,16 +2,11 @@ mod env;
 mod event;
 mod render;
 mod setting;
-mod window;
 
 use env::Env;
 use event::EventOut;
 
-// use yahmrslib::hmerr::Result;
-
 use glium::glutin;
-
-// use std::time::{Duration, Instant};
 
 fn main() {
     println!("Hello, world!");
@@ -28,7 +23,7 @@ pub fn event_loop() {
     let display = glium::Display::new(wb, cb, &event_loop).unwrap();
 
     event_loop.run(move |event, _, control_flow| {
-        *control_flow = env.cf_fps();
+        *control_flow = env.setting.fps();
 
         if let EventOut::ControlFlow(cf) = env.event(event) {
             *control_flow = cf;
@@ -38,7 +33,3 @@ pub fn event_loop() {
         }
     });
 }
-
-// fn next_frame() -> Instant {
-//     Instant::now() + Duration::from_nanos(1_000_000_000 / FPS as u64)
-// }

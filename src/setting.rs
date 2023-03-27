@@ -30,7 +30,7 @@ impl Setting {
         Self::default()
     }
 
-    fn fps(&self) -> ControlFlow {
+    pub fn fps(&self) -> ControlFlow {
         if let Some(fps) = self.fps {
             ControlFlow::WaitUntil(
                 Instant::now() + Duration::from_nanos(1_000_000_000 / fps as u64),

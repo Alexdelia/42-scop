@@ -1,7 +1,13 @@
-pub struct Env {}
+use crate::setting::Setting;
+
+pub struct Env {
+    pub setting: Setting,
+}
 
 impl Env {
     pub fn new() -> Self {
-        Self {}
+        Self {
+            setting: Setting::default(),
+        }
     }
 }
