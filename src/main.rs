@@ -1,8 +1,8 @@
-mod color;
 mod env;
 mod event;
-mod render;
+mod gpu;
 mod setting;
+pub use gpu::Color;
 
 use env::Env;
 use event::EventOut;
@@ -32,6 +32,15 @@ pub fn event_loop() -> Result<()> {
             env.setting.bg_color.b,
             env.setting.bg_color.a,
         );
+        frame
+            .draw(
+                &env.gpu.vertex_buffer,
+                &env.gpu.index_buffer,
+                &env.gpu.program,
+                &glium::uniforms::EmptyUniforms,
+                &Default::default(),
+            )
+            .unwrap();
         frame.finish().unwrap();
 
         if let EventOut::ControlFlow(cf) = env.event(event) {

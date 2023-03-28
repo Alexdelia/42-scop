@@ -1,13 +1,10 @@
-use crate::color::Color;
 use crate::env::Env;
+use crate::Color;
 
-use glium::{
-    glutin::{
-        dpi::PhysicalPosition,
-        event::{ElementState, Event, KeyboardInput, VirtualKeyCode, WindowEvent},
-        event_loop::ControlFlow,
-    },
-    Surface,
+use glium::glutin::{
+    dpi::PhysicalPosition,
+    event::{ElementState, Event, KeyboardInput, VirtualKeyCode, WindowEvent},
+    event_loop::ControlFlow,
 };
 
 pub enum EventOut {
@@ -63,7 +60,7 @@ impl Env {
             r: position.x as f32 / w as f32,
             g: position.y as f32 / h as f32,
             b: 0.0,
-            a: 1.0,
+            a: 0.5,
         };
         EventOut::None
     }

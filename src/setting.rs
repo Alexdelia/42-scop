@@ -1,12 +1,13 @@
-use crate::color::Color;
+use crate::Color;
 
 use glium::glutin::event_loop::ControlFlow;
 
+use std::path::Path;
 use std::time::{Duration, Instant};
 
 pub struct Setting {
-    pub window_title: &'static str,
-    pub window_icon: &'static str,
+    pub title: &'static str,
+    pub icon: &'static Path,
     fps: Option<u8>,
     pub bg_color: Color,
 }
@@ -14,10 +15,10 @@ pub struct Setting {
 impl Default for Setting {
     fn default() -> Self {
         Self {
-            window_title: "scop",
-            window_icon: "src/icon.png",
+            title: "scop",
+            icon: Path::new("src/icon.png"),
             fps: None,
-            bg_color: Color::new(1.0, 0.717647059, 0.77254902, 0.5),
+            bg_color: Color::new(0.0, 0.0, 0.0, 0.0),
         }
     }
 }
