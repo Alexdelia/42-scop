@@ -10,7 +10,6 @@ use event::EventOut;
 use yahmrslib::hmerr::Result;
 
 use glium::glutin;
-use glium::Surface;
 
 fn main() -> Result<()> {
     println!("Hello, world!");
@@ -22,40 +21,23 @@ pub fn event_loop() -> Result<()> {
     let mut event_loop = glutin::event_loop::EventLoop::new();
     let mut env = Env::new(&event_loop)?;
 
-    let mut t: f32 = -0.5;
+    println!("loading texture");
+    env.gpu.set_texture(&env.display, env.setting.texture)?;
+    println!("texture loaded");
+
+    const BASE: f32 = -30.0;
+    const SHIFT: f32 = 0.0005;
+    let mut t: f32 = 0.0;
+
     event_loop.run(move |event, _, control_flow| {
         *control_flow = env.setting.fps();
 
-        t += 0.0002;
-        if t > 0.5 {
-            t = -0.5;
+        t += SHIFT;
+        if t > -BASE {
+            t = BASE;
         }
 
-        let mut frame = env.display.draw();
-        frame.clear_color(
-            env.setting.bg_color.r,
-            env.setting.bg_color.g,
-            env.setting.bg_color.b,
-            env.setting.bg_color.a,
-        );
-        let uniform = glium::uniform! {
-            matrix: [
-                [ t.cos(), t.sin(), 0.0, 0.0],
-                [-t.sin(), t.cos(), 0.0, 0.0],
-                [0.0, 0.0, 1.0, 0.0],
-                [0.0, 0.0, 0.0, 1.0f32],
-            ]
-        };
-        frame
-            .draw(
-                &env.gpu.vertex_buffer,
-                &env.gpu.index_buffer,
-                &env.gpu.program,
-                &uniform,
-                &Default::default(),
-            )
-            .unwrap();
-        frame.finish().unwrap();
+        env.render(t);
 
         if let EventOut::ControlFlow(cf) = env.event(event) {
             *control_flow = cf;

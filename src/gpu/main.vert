@@ -1,16 +1,15 @@
 #version 150
 
 in vec3 position;
-out vec4 color;
+in vec3 color;
+in vec2 texture;
+out vec4 v_color;
+out vec2 v_texture;
 
 uniform mat4 matrix;
 
 void main() {
-	color = vec4(
-		(position.x + 1.0) / 2.0,
-		(position.y + 1.0) / 2.0,
-		(position.z + 1.0) / 2.0,
-		1.0
-	);
+	v_color = vec4(color, 1.0);
+	v_texture = texture;
     gl_Position = matrix * vec4(position, 1.0);
 }

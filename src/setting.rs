@@ -10,6 +10,7 @@ pub struct Setting {
     pub icon: &'static Path,
     fps: Option<u8>,
     pub bg_color: Color,
+    pub texture: Option<&'static Path>,
 }
 
 impl Default for Setting {
@@ -19,6 +20,7 @@ impl Default for Setting {
             icon: Path::new("src/icon.png"),
             fps: None,
             bg_color: Color::new(0.0, 0.0, 0.0, 0.0),
+            texture: Some(Path::new("resources/texture/mlp0.png")),
         }
     }
 }
