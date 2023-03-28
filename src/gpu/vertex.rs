@@ -1,21 +1,44 @@
-#[repr(C)]
-#[derive(Copy, Clone, Debug, bytemuck::Pod, bytemuck::Zeroable)]
+#[derive(Clone, Copy)]
 pub struct Vertex {
     pub position: [f32; 3],
     pub color: [f32; 3],
+    pub texture: [f32; 2],
+}
+
+glium::implement_vertex!(Vertex, position, color, texture);
+
+impl Default for Vertex {
+    fn default() -> Self {
+        Self {
+            position: [0.0, 0.0, 0.0],
+            color: [0.0, 0.0, 0.0],
+            texture: [0.0, 0.0],
+        }
+    }
 }
 
 impl Vertex {
-    const ATTRIBS: [wgpu::VertexAttribute; 2] =
-        wgpu::vertex_attr_array![0 => Float32x3, 1 => Float32x3];
+    pub fn x(&self) -> f32 {
+        self.position[0]
+    }
 
-    pub fn desc<'a>() -> wgpu::VertexBufferLayout<'a> {
-        use std::mem;
+    pub fn y(&self) -> f32 {
+        self.position[1]
+    }
 
-        wgpu::VertexBufferLayout {
-            array_stride: mem::size_of::<Self>() as wgpu::BufferAddress,
-            step_mode: wgpu::VertexStepMode::Vertex,
-            attributes: &Self::ATTRIBS,
-        }
+    pub fn z(&self) -> f32 {
+        self.position[2]
+    }
+
+    pub fn r(&self) -> f32 {
+        self.color[0]
+    }
+
+    pub fn g(&self) -> f32 {
+        self.color[1]
+    }
+
+    pub fn b(&self) -> f32 {
+        self.color[2]
     }
 }
