@@ -25,7 +25,7 @@ impl Env {
         }
     }
 
-    fn key(&self, input: KeyboardInput) -> EventOut {
+    fn key(&mut self, input: KeyboardInput) -> EventOut {
         if let KeyboardInput {
             state: ElementState::Pressed,
             virtual_keycode: Some(key),
@@ -38,9 +38,21 @@ impl Env {
         }
     }
 
-    fn key_simple(&self, key: VirtualKeyCode) -> EventOut {
+    fn key_simple(&mut self, key: VirtualKeyCode) -> EventOut {
         match key {
             VirtualKeyCode::Escape => EventOut::ControlFlow(ControlFlow::Exit),
+            VirtualKeyCode::T | VirtualKeyCode::Space => {
+                self.gpu.texture_on = !self.gpu.texture_on;
+                EventOut::None
+            }
+            VirtualKeyCode::Y => {
+                self.gpu.prev_texture();
+                EventOut::None
+            }
+            VirtualKeyCode::U => {
+                self.gpu.next_texture();
+                EventOut::None
+            }
             _ => {
                 eprintln!("no bind for {:?}", key);
                 EventOut::None

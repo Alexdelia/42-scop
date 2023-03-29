@@ -62,4 +62,12 @@ impl Gpu {
     pub fn next_texture(&mut self) {
         self.texture_index = (self.texture_index + 1) % self.texture.len();
     }
+
+    pub fn prev_texture(&mut self) {
+        self.texture_index = if self.texture_index == 0 {
+            self.texture.len() - 1
+        } else {
+            self.texture_index - 1
+        };
+    }
 }
