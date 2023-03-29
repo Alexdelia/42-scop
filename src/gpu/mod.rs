@@ -3,6 +3,8 @@ pub use color::Color;
 mod render;
 mod vertex;
 pub use vertex::Vertex;
+mod load_texture;
+use load_texture::load_texture;
 
 use yahmrslib::hmerr::Result;
 
@@ -10,7 +12,8 @@ pub struct Gpu {
     pub program: glium::Program,
     pub vertex_buffer: glium::VertexBuffer<Vertex>,
     pub index_buffer: glium::index::NoIndices,
-    texture: Option<glium::texture::SrgbTexture2d>,
+    texture: Vec<glium::texture::SrgbTexture2d>,
+    texture_index: usize,
 }
 
 impl Gpu {
@@ -45,55 +48,16 @@ impl Gpu {
                 include_str!("main.frag"),
                 None,
             )?,
-            texture: None,
+            texture: load_texture(display),
+            texture_index: 0,
         })
     }
 
-    pub fn get_texture(&self) -> Option<&glium::texture::SrgbTexture2d> {
-        self.texture.as_ref()
+    pub fn get_texture(&self) -> &glium::texture::SrgbTexture2d {
+        &self.texture[self.texture_index]
     }
 
-    pub fn set_texture(
-        &mut self,
-        display: &glium::Display,
-        texture: Option<&std::path::Path>,
-    ) -> Result<()> {
-        let Some(path) = texture else {
-			self.texture = None;
-			return Ok(());
-		};
-
-        let image = image::open(path)
-            .map_err(|e| {
-                eprintln!("failed to open texture path '{}'\n{e}", path.display());
-                e
-            })?
-            .into_rgba8();
-        let image_dimensions = image.dimensions();
-        let image =
-            glium::texture::RawImage2d::from_raw_rgba_reversed(&image.into_raw(), image_dimensions);
-        self.texture = Some(
-            glium::texture::SrgbTexture2d::new(display, image).map_err(|e| {
-                eprintln!(
-                    "failed to create texture from image '{}'\n{e}",
-                    path.display(),
-                );
-                e
-            })?,
-        );
-        Ok(())
-
-        /*
-        use std::io::Cursor;
-        let image = image::load(
-            Cursor::new(&include_bytes!("/path/to/image.png")),
-            image::ImageFormat::Png,
-        )
-        .unwrap()
-        .to_rgba8();
-        let image_dimensions = image.dimensions();
-        let image =
-            glium::texture::RawImage2d::from_raw_rgba_reversed(&image.into_raw(), image_dimensions);
-        */
+    pub fn next_texture(&mut self) {
+        self.texture_index = (self.texture_index + 1) % self.texture.len();
     }
 }

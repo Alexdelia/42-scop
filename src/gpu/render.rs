@@ -21,6 +21,7 @@ impl Env {
                 [0.0, 0.0, 0.0, 1.0f32],
             ],
             tex: self.gpu.get_texture().unwrap(),
+            texture_on: self.setting.texture_on,
         };
 
         frame

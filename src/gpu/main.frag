@@ -5,8 +5,11 @@ in vec2 v_texture;
 out vec4 out_color;
 
 uniform sampler2D tex;
+uniform bool texture_on;
 
 void main() {
-    // out_color = v_color;
-	out_color = texture(tex, v_texture);
+	if (texture_on)
+		out_color = texture(tex, v_texture);
+	else
+    	out_color = v_color;
 }
