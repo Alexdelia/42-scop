@@ -14,6 +14,7 @@ pub struct Gpu {
     pub index_buffer: glium::index::NoIndices,
     texture: Vec<glium::texture::SrgbTexture2d>,
     texture_index: usize,
+    pub texture_on: bool,
 }
 
 impl Gpu {
@@ -50,6 +51,7 @@ impl Gpu {
             )?,
             texture: load_texture(display),
             texture_index: 0,
+            texture_on: false,
         })
     }
 

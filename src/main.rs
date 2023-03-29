@@ -21,10 +21,6 @@ pub fn event_loop() -> Result<()> {
     let mut event_loop = glutin::event_loop::EventLoop::new();
     let mut env = Env::new(&event_loop)?;
 
-    println!("loading texture");
-    env.gpu.set_texture(&env.display, env.setting.texture)?;
-    println!("texture loaded");
-
     const BASE: f32 = -30.0;
     const SHIFT: f32 = 0.0005;
     let mut t: f32 = 0.0;
