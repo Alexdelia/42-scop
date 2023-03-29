@@ -23,6 +23,17 @@ impl Env {
             glutin::ContextBuilder::new(),
             &event_loop,
         )?;
+        {
+            use glium::Surface;
+            let mut frame = display.draw();
+            frame.clear_color(
+                setting.bg_color.r,
+                setting.bg_color.g,
+                setting.bg_color.b,
+                setting.bg_color.a,
+            );
+            frame.finish().unwrap();
+        }
         let gpu = crate::gpu::Gpu::new(&display)?;
 
         Ok(Self {
