@@ -3,7 +3,7 @@ use crate::env::Env;
 use glium::Surface;
 
 impl Env {
-    pub fn render(&self, t: f32) {
+    pub fn render(&self, rotate_angle: f32) {
         let mut frame = self.display.draw();
 
         frame.clear_color(
@@ -14,12 +14,7 @@ impl Env {
         );
 
         let uniform = glium::uniform! {
-            matrix: [
-                [ t.cos(), t.sin(), 0.0, 0.0],
-                [-t.sin(), t.cos(), 0.0, 0.0],
-                [0.0, 0.0, 1.0, 0.0],
-                [0.0, 0.0, 0.0, 1.0f32],
-            ],
+            matrix: rotate_matrix(rotate_angle),
             tex: self.gpu.get_texture(),
             texture_on: self.gpu.texture_on,
         };
@@ -36,4 +31,15 @@ impl Env {
 
         frame.finish().unwrap();
     }
+}
+
+fn rotate_matrix(angle: f32) -> [[f32; 4]; 4] {
+    let c = angle.cos();
+    let s = angle.sin();
+    [
+        [c, 0.0, s, 0.0],
+        [0.0, 1.0, 0.0, 0.0],
+        [-s, 0.0, c, 0.0],
+        [0.0, 0.0, 0.0, 1.0f32],
+    ]
 }

@@ -12,6 +12,7 @@ pub struct Setting {
     pub icon: &'static Path,
     fps: Option<u8>,
     pub bg_color: Color,
+    pub rotate: bool,
 }
 
 impl Default for Setting {
@@ -21,15 +22,12 @@ impl Default for Setting {
             icon: Path::new("src/icon.png"),
             fps: None,
             bg_color: Color::new(0.0, 0.0, 0.0, 0.0),
+            rotate: true,
         }
     }
 }
 
 impl Setting {
-    pub fn new() -> Self {
-        Self::default()
-    }
-
     pub fn fps(&self) -> ControlFlow {
         if let Some(fps) = self.fps {
             ControlFlow::WaitUntil(

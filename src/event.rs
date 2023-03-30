@@ -41,7 +41,7 @@ impl Env {
     fn key_simple(&mut self, key: VirtualKeyCode) -> EventOut {
         match key {
             VirtualKeyCode::Escape => EventOut::ControlFlow(ControlFlow::Exit),
-            VirtualKeyCode::T | VirtualKeyCode::Space => {
+            VirtualKeyCode::T => {
                 self.gpu.texture_on = !self.gpu.texture_on;
                 EventOut::None
             }
@@ -51,6 +51,10 @@ impl Env {
             }
             VirtualKeyCode::U => {
                 self.gpu.next_texture();
+                EventOut::None
+            }
+            VirtualKeyCode::R => {
+                self.setting.rotate = !self.setting.rotate;
                 EventOut::None
             }
             _ => {
