@@ -1,10 +1,8 @@
-mod color;
-pub use color::Color;
-mod render;
-mod vertex;
-pub use vertex::Vertex;
 mod load_texture;
+mod render;
 use load_texture::load_texture;
+
+use crate::Vertex;
 
 use yahmrslib::hmerr::Result;
 

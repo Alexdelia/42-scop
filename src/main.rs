@@ -1,8 +1,11 @@
 mod env;
 mod event;
 mod gpu;
+mod obj;
+mod parse;
 mod setting;
-pub use gpu::Color;
+
+pub use obj::{Color, Object, Vertex};
 
 use env::Env;
 use event::EventOut;
