@@ -6,6 +6,7 @@ use std::path::Path;
 use std::time::{Duration, Instant};
 
 pub const TEXTURE_PATH: &str = "resources/texture/";
+pub const OBJ_PATH: &str = "resources/obj/";
 
 pub struct Setting {
     pub title: &'static str,

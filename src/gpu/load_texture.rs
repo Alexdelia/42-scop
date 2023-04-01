@@ -1,3 +1,4 @@
+use crate::parse::load_dir;
 use crate::setting::TEXTURE_PATH;
 
 enum LoadError {
@@ -6,7 +7,7 @@ enum LoadError {
 }
 
 pub fn load_texture(display: &glium::Display) -> Vec<glium::texture::SrgbTexture2d> {
-    let Ok(dir) = load_dir() else {
+    let Ok(dir) = load_dir(TEXTURE_PATH) else {
 		return vec![empty_texture(display)];
 	};
     let mut texture: Vec<(
@@ -44,25 +45,6 @@ fn empty_texture(display: &glium::Display) -> glium::texture::SrgbTexture2d {
             e
         })
         .unwrap()
-}
-
-fn load_dir() -> Result<Vec<std::path::PathBuf>, std::io::Error> {
-    Ok(std::fs::read_dir(TEXTURE_PATH)
-        .map_err(|e| {
-            eprintln!("failed to read texture directory '{}'\n{e}", TEXTURE_PATH);
-            e
-        })?
-        .filter_map(|e| {
-            e.ok().and_then(|e| {
-                let path = e.path();
-                if path.is_file() {
-                    Some(path)
-                } else {
-                    None
-                }
-            })
-        })
-        .collect())
 }
 
 fn path_to_texture(
