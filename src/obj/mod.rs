@@ -10,14 +10,38 @@ pub use material::Material;
 
 pub struct Object {
     pub name: String,
-    pub group: String,
+    pub group: Option<String>,
     pub vertex: Vec<Vertex>,
     pub texture: Vec<VertexTexture>,
     pub normal: Vec<VertexNormal>,
     // pub parameter_space: Vec<Vertex>,
     pub face: Vec<Face>,
-    pub material: Material, // usemtl not fully implemented
-    pub smooth: bool,       // not implemented
+    pub material: Option<Material>, // usemtl not fully implemented
+    pub smooth: bool,               // not implemented
+}
+
+impl Default for Object {
+    fn default() -> Self {
+        Self {
+            name: String::new(),
+            group: None,
+            vertex: Vec::new(),
+            texture: Vec::new(),
+            normal: Vec::new(),
+            face: Vec::new(),
+            material: None,
+            smooth: false,
+        }
+    }
+}
+
+impl Object {
+    pub fn new(file: impl Into<String>) -> Self {
+        Self {
+            name: file.into(),
+            ..Default::default()
+        }
+    }
 }
 
 pub struct VertexNormal {

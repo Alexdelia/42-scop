@@ -17,6 +17,8 @@ use glium::glutin;
 fn main() -> Result<()> {
     println!("Hello, world!");
 
+    let obj = parse::parse()?;
+
     event_loop()
 }
 
