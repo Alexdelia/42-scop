@@ -1,3 +1,5 @@
+#![allow(unused)] // TODO: remove
+
 mod env;
 mod event;
 mod gpu;
@@ -10,6 +12,7 @@ pub use obj::{Color, Object, Vertex};
 use env::Env;
 use event::EventOut;
 
+use yahmrslib::hmerr::pfe;
 use yahmrslib::hmerr::Result;
 
 use glium::glutin;
