@@ -2,15 +2,13 @@ mod load_dir;
 pub use load_dir::load_dir;
 mod obj;
 
-use yahmrslib::hmerr::Result;
-
+use crate::prelude::*;
 use crate::setting::OBJ_PATH;
 use crate::Object;
 
 use std::path::{Path, PathBuf};
 
 pub fn parse() -> Result<Vec<Object>> {
-    Err(yahmrslib::hmerr::pfe!("test"))?;
     let (obj, mtl) = group_file(load_dir(OBJ_PATH)?);
     let mut ret = Vec::new();
 

@@ -2,9 +2,8 @@ mod load_texture;
 mod render;
 use load_texture::load_texture;
 
+use crate::prelude::*;
 use crate::Vertex;
-
-use yahmrslib::hmerr::Result;
 
 pub struct Gpu {
     pub program: glium::Program,

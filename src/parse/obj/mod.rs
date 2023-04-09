@@ -1,6 +1,5 @@
+use crate::prelude::*;
 use crate::Object;
-
-use yahmrslib::hmerr::Result;
 
 use std::fs::File;
 use std::io::{BufRead, BufReader};

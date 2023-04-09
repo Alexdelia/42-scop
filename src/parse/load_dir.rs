@@ -1,6 +1,6 @@
 use std::path::Path;
 
-pub fn load_dir(dir: impl AsRef<Path>) -> Result<Vec<std::path::PathBuf>, std::io::Error> {
+pub fn load_dir(dir: impl AsRef<Path>) -> std::io::Result<Vec<std::path::PathBuf>> {
     let path = dir.as_ref();
     Ok(std::fs::read_dir(path)
         .map_err(|e| {

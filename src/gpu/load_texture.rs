@@ -1,4 +1,5 @@
 use crate::parse::load_dir;
+use crate::prelude::*;
 use crate::setting::TEXTURE_PATH;
 
 enum LoadError {
@@ -50,7 +51,7 @@ fn empty_texture(display: &glium::Display) -> glium::texture::SrgbTexture2d {
 fn path_to_texture(
     display: &glium::Display,
     path: &std::path::Path,
-) -> Result<glium::texture::SrgbTexture2d, LoadError> {
+) -> std::result::Result<glium::texture::SrgbTexture2d, LoadError> {
     let image = image::open(path)
         .map_err(|e| {
             eprintln!("failed to open texture path '{}'\n{e}", path.display());

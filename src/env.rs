@@ -1,6 +1,6 @@
-use crate::setting::Setting;
+use crate::prelude::*;
 
-use yahmrslib::hmerr::Result;
+use crate::setting::Setting;
 
 use glium::glutin::{self, window::Icon};
 
