@@ -6,6 +6,8 @@ use crate::prelude::*;
 use crate::setting::OBJ_PATH;
 use crate::Object;
 
+use ansi::abbrev::{B, BLU, D, G, M, R};
+
 use std::path::{Path, PathBuf};
 
 pub fn parse() -> Result<Vec<Object>> {
@@ -15,13 +17,15 @@ pub fn parse() -> Result<Vec<Object>> {
     for o in obj {
         match obj::parse(&o, &mtl) {
             Ok(obj) => ret.push(obj),
-            Err(e) => eprintln!("ERROR with {}: {}", o.display(), e), // TODO: use hmerr
+            Err(e) => warn!("cannot load {} caused by:\n{}", o.display(), e),
         }
     }
 
     if ret.is_empty() {
-        todo!("return error: did not manage to load any object");
-        // Err("did not manage to load any object")
+        Err(pfe!(
+            "did not manage to load any {W}object{D}",
+            h: f!("make sure you have at least one {G}valid {B}{BLU}.obj{D} file in {B}{M}{OBJ_PATH}{D}")
+        ))?
     } else {
         Ok(ret)
     }
@@ -35,8 +39,8 @@ fn group_file(dir: Vec<PathBuf>) -> (Vec<PathBuf>, Vec<PathBuf>) {
         match check_ext(&p) {
             Ext::Obj => obj.push(p),
             Ext::Mtl => mtl.push(p),
-            Ext::None => eprintln!(
-                "WARNING with {}: only treating .obj/.mtl files",
+            Ext::None => warn!(
+                "{} is not a {B}{BLU}.obj{D}/{B}{BLU}.mtl{D} file",
                 p.display()
             ),
         }
