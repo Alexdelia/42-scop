@@ -1,5 +1,7 @@
 mod load_dir;
 pub use load_dir::load_dir;
+mod file_data;
+use file_data::FileData;
 mod mtl;
 mod obj;
 
@@ -9,12 +11,12 @@ use crate::Object;
 
 use ansi::abbrev::{B, BLU, D, G, M, R};
 
+use std::fs::File;
+use std::io::{BufRead, BufReader};
 use std::path::{Path, PathBuf};
 
-type NamedFile = (String, Vec<String>, Vec<String>);
-
 pub fn parse() -> Result<Vec<Object>> {
-    let (obj, mtl) = group_file(load_dir(OBJ_PATH)?);
+    let (obj, mtl) = get_file(OBJ_PATH)?;
     let mut ret = Vec::new();
 
     for o in obj {
@@ -34,10 +36,11 @@ pub fn parse() -> Result<Vec<Object>> {
     }
 }
 
-fn group_file(dir: Vec<PathBuf>) -> (Vec<PathBuf>, Vec<PathBuf>) {
+fn get_file(path: impl AsRef<Path>) -> Result<(Vec<PathBuf>, Vec<PathBuf>)> {
+    let dir = load_dir(path)?;
+
     let (mut obj, mut mtl) = (Vec::new(), Vec::new());
 
-    // check if each file.obj has his file.mtl
     for p in dir {
         match check_ext(&p) {
             Ext::Obj => obj.push(p),
@@ -49,7 +52,7 @@ fn group_file(dir: Vec<PathBuf>) -> (Vec<PathBuf>, Vec<PathBuf>) {
         }
     }
 
-    (obj, mtl)
+    Ok((obj, mtl))
 }
 
 enum Ext {
@@ -105,33 +108,5 @@ mod tests {
 
         let path = Path::new("test");
         assert_eq!(check_ext(path), Ext::None);
-    }
-
-    #[test]
-    fn test_group_file() {
-        let dir = vec![
-            PathBuf::from("test0.obj"),
-            PathBuf::from("test1.obj"),
-            PathBuf::from("test2.obj"),
-            PathBuf::from("test0.mtl"),
-            PathBuf::from("test1.mtl"),
-            PathBuf::from("test.txt"),
-            PathBuf::from("test"),
-        ];
-
-        let (obj, mtl) = group_file(dir);
-
-        assert_eq!(
-            obj,
-            vec![
-                PathBuf::from("test0.obj"),
-                PathBuf::from("test1.obj"),
-                PathBuf::from("test2.obj")
-            ]
-        );
-        assert_eq!(
-            mtl,
-            vec![PathBuf::from("test0.mtl"), PathBuf::from("test1.mtl")]
-        );
     }
 }
