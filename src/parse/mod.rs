@@ -2,6 +2,7 @@ mod load_dir;
 pub use load_dir::load_dir;
 mod file_data;
 use file_data::FileData;
+mod get_line;
 mod mtl;
 mod obj;
 
@@ -9,7 +10,7 @@ use crate::prelude::*;
 use crate::setting::OBJ_PATH;
 use crate::Object;
 
-use ansi::abbrev::{B, BLU, D, G, M, R};
+use ansi::abbrev::{B, BLU, D, G, M, R, W};
 
 use std::fs::File;
 use std::io::{BufRead, BufReader};
@@ -28,7 +29,7 @@ pub fn parse() -> Result<Vec<Object>> {
 
     if ret.is_empty() {
         Err(pfe!(
-            "did not manage to load any {W}object{D}",
+            f!("did not manage to load any {W}object{D}"),
             h: f!("make sure you have at least one {G}valid {B}{BLU}.obj{D} file in {B}{M}{OBJ_PATH}{D}")
         ))?
     } else {

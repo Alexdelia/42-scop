@@ -16,7 +16,7 @@ pub fn get_material(f: &FileData, mtl_path: &Vec<PathBuf>) -> Result<Option<Path
 
         if !mtl_path.contains(&path) {
             return Err(pfe!(
-                "cannot find {B}{Y}{path}{D} for {B}{Y}{}{D}",
+                f!("cannot find {B}{Y}{path}{D} for {B}{Y}{}{D}"),
                 h:"make sure you have a valid {B}{G}.mtl{D} file in the {G}same directory{D} as the {B}{BLU}.obj{D} file",
                 f:f.name.clone(),
                 l:ple!(f.content[i].clone(), i:i, w:pwe!((0, no_comment_size)))

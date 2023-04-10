@@ -15,6 +15,8 @@ use std::path::{Path, PathBuf};
 pub fn parse(obj_path: &Path, mtl_path: &Vec<PathBuf>) -> Result<Object> {
     let f = FileData::new(obj_path)?;
 
+    super::get_line::get_line_u(&f, "usemtl", "yes")?;
+
     let mtl = if let Some(mtl) = get_material(&f, mtl_path)? {
         Some(mtl::parse(&mtl)?)
     } else {
