@@ -1,5 +1,6 @@
 mod load_dir;
 pub use load_dir::load_dir;
+mod mtl;
 mod obj;
 
 use crate::prelude::*;
@@ -9,6 +10,8 @@ use crate::Object;
 use ansi::abbrev::{B, BLU, D, G, M, R};
 
 use std::path::{Path, PathBuf};
+
+type NamedFile = (String, Vec<String>, Vec<String>);
 
 pub fn parse() -> Result<Vec<Object>> {
     let (obj, mtl) = group_file(load_dir(OBJ_PATH)?);
@@ -68,7 +71,6 @@ mod tests {
     use super::*;
     use std::path::{Path, PathBuf};
 
-    // derive PartialEq for Ext
     impl PartialEq for Ext {
         fn eq(&self, other: &Self) -> bool {
             match (self, other) {
@@ -79,6 +81,7 @@ mod tests {
             }
         }
     }
+
     impl std::fmt::Debug for Ext {
         fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
             match self {
