@@ -1,10 +1,25 @@
 use crate::prelude::*;
 
-use super::{ExpectedFormat, FileData, Keyword};
+use super::{ExpectedLine, Keyword, Occurence, Token};
+use crate::parse::FileData;
 
 use ansi::abbrev::{B, D, G, M, R, Y};
 
+type ParsedLine = (Vec<String>, usize); // (tokens, line_index)
+
 type LineToken = (Vec<String>, usize); // (tokens, line_index)
+
+pub fn get_line(f: &FileData, el: &ExpectedLine) -> Result<Vec<ParsedLine>> {
+    let mut ret: Vec<ParsedLine> = Vec::new();
+
+    for (i, line) in f.diluted.iter().enumerate() {
+        if line.starts_with(el.k.keyword) {
+            ret.push((el.check(f, line, i)?, i));
+        }
+    }
+
+    Ok(ret)
+}
 
 pub fn get_line_u(
     f: &FileData,

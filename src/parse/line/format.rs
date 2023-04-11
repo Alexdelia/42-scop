@@ -1,3 +1,16 @@
+pub struct Format(Vec<Token>);
+
+impl Format {
+    pub fn new(tokens: Vec<Token>) -> Self {
+        Self(tokens)
+    }
+
+    // will probably need index of line, FileData and other info in case of error
+    pub fn check(&self, line: &str) -> Result<Vec<String>> {
+        todo!()
+    }
+}
+
 pub struct ExpectedFormat {
     pub format: String, // format without keyword
     pub size: usize,    // number of tokens in format	(without keyword)
