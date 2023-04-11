@@ -1,7 +1,7 @@
 mod keyword;
 pub use keyword::Keyword;
 mod format;
-pub use format::Format;
+pub use format::{ExpectedSize, Format};
 mod occurence;
 pub use occurence::Occurence;
 
@@ -13,11 +13,11 @@ use ansi::abbrev::{B, D, G, M, R, Y};
 
 type ParsedLine = (Vec<String>, usize); // (tokens, line_index)
 
-pub fn get_line(f: &FileData, el: &ExpectedLine) -> Result<Vec<ParsedLine>> {
+pub fn get_line(f: &FileData, el: ExpectedLine) -> Result<Vec<ParsedLine>> {
     let mut ret: Vec<ParsedLine> = Vec::new();
 
     for i in 0..f.diluted.len() {
-        if f.diluted[i].starts_with(el.k.keyword) {
+        if f.diluted[i].starts_with(&el.k.keyword) {
             ret.push((el.check(f, i)?, i));
         }
     }
@@ -27,7 +27,7 @@ pub fn get_line(f: &FileData, el: &ExpectedLine) -> Result<Vec<ParsedLine>> {
         Err(e) => Err(pfe!(
             f!("{B}{Y}{}{D} {e}", el.k.keyword),
             h:el.help(),
-            f:f.name,
+            f:f.name.clone(),
         ))?,
     }
 }
@@ -48,14 +48,15 @@ impl ExpectedLine {
     }
 
     pub fn check(&self, f: &FileData, line_index: usize) -> Result<Vec<String>> {
-        let line = f.diluted[line_index].replacen(self.k.keyword, "", 1).trim();
+        let binding = f.diluted[line_index].replacen(&self.k.keyword, "", 1);
+        let line = binding.trim();
         match self.format.check(line).map_err(|(expected, got)| {
             pfe!(
                 f!("expected {B}{G}{expected}{D} token after {B}{Y}{keyword}{D}, got {B}{R}{got}{D}",
 					keyword=self.k.keyword,
 			),
                 h:self.help(),
-                f:f.name,
+                f:f.name.clone(),
                 l:ple!(line, i:line_index, w:pwe!((0, line.len())))
             )
         }) {

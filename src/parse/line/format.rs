@@ -65,8 +65,8 @@ impl Display for Size {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
             Self::Fixed(expected_size) => write!(f, "{}", expected_size),
+            Self::Undefined => write!(f, "undefined"),
             Self::Range(min, max) => write!(f, "{}-{}", min, max),
-            _ => write!(f, "undefined"),
         }
     }
 }
@@ -75,8 +75,8 @@ impl Size {
     fn in_range(&self, size: usize) -> bool {
         match self {
             Self::Fixed(expected_size) => size == *expected_size,
+            Self::Undefined => true,
             Self::Range(min, max) => size >= *min && size <= *max,
-            _ => true,
         }
     }
 

@@ -44,7 +44,7 @@ impl Occurence {
         match self {
             Occurence::Once => n == 1,
             Occurence::Optional => n <= 1,
-            Occurence::ZeroOrMore => n >= 0,
+            Occurence::ZeroOrMore => true, // n >= 0
             Occurence::OneOrMore => n >= 1,
             Occurence::Exactly(x) => n == *x,
             Occurence::Range(start, end) => n >= *start && n <= *end,

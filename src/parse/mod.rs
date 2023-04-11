@@ -10,7 +10,7 @@ use crate::prelude::*;
 use crate::setting::OBJ_PATH;
 use crate::Object;
 
-use ansi::abbrev::{B, BLU, D, G, M, R, W};
+use ansi::abbrev::{B, BLU, D, G, M, R, Y};
 
 use std::fs::File;
 use std::io::{BufRead, BufReader};
@@ -23,13 +23,13 @@ pub fn parse() -> Result<Vec<Object>> {
     for o in obj {
         match obj::parse(&o, &mtl) {
             Ok(obj) => ret.push(obj),
-            Err(e) => warn!("cannot load {} caused by:\n{}", o.display(), e),
+            Err(e) => warn!("cannot load {} caused by:\n{e}", o.display()),
         }
     }
 
     if ret.is_empty() {
         Err(pfe!(
-            f!("did not manage to load any {W}object{D}"),
+            f!("did not manage to load any {Y}object{D}"),
             h: f!("make sure you have at least one {G}valid {B}{BLU}.obj{D} file in {B}{M}{OBJ_PATH}{D}")
         ))?
     } else {
