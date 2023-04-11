@@ -1,6 +1,6 @@
 use crate::prelude::*;
 
-use super::{ExpectedLine, Keyword, Occurence, Token};
+use super::{ExpectedLine, Keyword, Occurence};
 use crate::parse::FileData;
 
 use ansi::abbrev::{B, D, G, M, R, Y};
