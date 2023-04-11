@@ -7,18 +7,24 @@ use ansi::abbrev::{B, D, G, M, R, Y};
 
 type ParsedLine = (Vec<String>, usize); // (tokens, line_index)
 
-type LineToken = (Vec<String>, usize); // (tokens, line_index)
-
 pub fn get_line(f: &FileData, el: &ExpectedLine) -> Result<Vec<ParsedLine>> {
     let mut ret: Vec<ParsedLine> = Vec::new();
 
-    for (i, line) in f.diluted.iter().enumerate() {
-        if line.starts_with(el.k.keyword) {
-            ret.push((el.check(f, line, i)?, i));
+    for i in 0..f.diluted.len() {
+        if f.diluted[i].starts_with(el.k.keyword) {
+            ret.push((el.check(f, i)?, i));
         }
     }
 
-    Ok(ret)
+    match el.occurence.check(ret.len()) {
+        Ok(_) => Ok(ret),
+        Err(e) => todo!(),
+        /*pfe!(
+        f!("{B}{Y}{}{D} {e}", el.k.keyword),
+        h:f!(""),	// use display of Format
+        f:f.name,
+        */
+    }
 }
 
 pub fn get_line_u(
