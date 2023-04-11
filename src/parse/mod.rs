@@ -2,7 +2,7 @@ mod load_dir;
 pub use load_dir::load_dir;
 mod file_data;
 use file_data::FileData;
-mod get_line;
+pub mod line;
 mod mtl;
 mod obj;
 
