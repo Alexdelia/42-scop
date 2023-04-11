@@ -65,31 +65,17 @@ pub fn get_line_u(
     keyword: &str,
     expected_format: Option<impl Into<String>>,
     keyword_def_desc: &str,
-) -> Result<Option<(usize, String)>> {
+) -> Result<Option<(usize, Vec<String>)>> {
     let (ef, ef_size) = format_ef(keyword, expected_format);
-    let mut ret: Option<(usize, String)> = None;
+    let mut ret: Option<(usize, Vec<String>)> = None;
 
     for (i, line) in f.diluted.iter().enumerate() {
         if line.starts_with(keyword) {
-            let mut split: Vec<&str> = line.split_whitespace().into_iter().collect();
-
-			todo!("use `line_error()` instead");
-            if split.len() != ef_size {
-                return Err(pfe!(
-                    f!("expected {B}{G}{}{D} token after {B}{Y}{keyword}{D}, found {B}{R}{}{D}",
-                        ef_size - 1,
-                        split.len() - 1,
-                    ),
-                    h:f!(
-"{B}{Y}{keyword}{D} define {keyword_def_desc}
-the line must follow the format: `{B}{keyword} {M}{ef}{D}`"),
-                    f:f.name.clone(),
-                    l:ple!(f.content[i].clone(), i:i, w:pwe!((0, line.len())))
-                ))?;
-            }
+            let token =
+                check_line_format(f, (keyword, keyword_def_desc), (&ef, ef_size), (line, i))?;
 
             if ret.is_none() {
-                ret = Some((i, split[1].to_string()));
+                ret = Some((i, token));
             } else {
                 warn!("does not support multiple {B}{Y}{keyword}{D} definition");
             }
@@ -119,6 +105,39 @@ fn format_ef(keyword: &str, expected_format: Option<impl Into<String>>) -> (Stri
     (ef, ef_size)
 }
 
-fn line_error(
-	f: &FileData,
-	// TODO
+fn check_line_format(
+    f: &FileData,
+    keyword: (&str, &str),
+    ef: (&str, usize),
+    line: (&str, usize),
+) -> Result<Vec<String>> {
+    let mut split: Vec<String> = line
+        .0
+        .split_whitespace()
+        .into_iter()
+        .map(|s| s.to_string())
+        .collect();
+
+    if split.len() != ef.1 {
+        let unprocessed_line = f.content[line.1].clone();
+        return Err(pfe!(
+            f!("expected {B}{G}{expected_size}{D} token after {B}{Y}{keyword}{D}, found {B}{R}{got_size}{D}",
+                expected_size=ef.1 - 1,
+                got_size=split.len() - 1,
+                keyword=keyword.0
+            ),
+            h:f!(
+"{B}{Y}{keyword}{D} define {desc}
+the line must follow the format: `{B}{keyword} {M}{format}{D}`",
+                keyword=keyword.0,
+                desc=keyword.1,
+                format=ef.0
+            ),
+            f:f.name.clone(),
+            l:ple!(unprocessed_line, i:line.1, w:pwe!((0, unprocessed_line.len())))
+        ))?;
+    }
+
+    split.remove(0);
+    Ok(split)
+}
