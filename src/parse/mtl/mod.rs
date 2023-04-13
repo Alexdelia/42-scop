@@ -1,17 +1,20 @@
+mod newmtl;
+use newmtl::newmtl;
+mod ka;
+use ka::ka;
+
 use crate::prelude::*;
 
-use super::FileData;
 use crate::obj::Material;
+
+use spof::FileData;
 
 use std::path::Path;
 
 pub fn parse(path: &Path) -> Result<Material> {
-    let f = FileData::new(path)?;
+    let f = FileData::new(path, Some("#"))?;
 
-    let newmtl = parse_newmtl(&f)?;
-    todo!()
-}
-
-fn parse_newmtl(f: &FileData) -> Result<String> {
+    let newmtl = newmtl(&f)?;
+    let ka = ka(&f)?;
     todo!()
 }

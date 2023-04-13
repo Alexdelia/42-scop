@@ -7,21 +7,25 @@ use spof::{get_line, ExpectedLine, ExpectedSize, FileData, Format, Keyword, Occu
 
 use std::path::PathBuf;
 
-pub fn get_material(f: &FileData, mtl_path: &Vec<PathBuf>) -> Result<Option<PathBuf>> {
+pub fn usemtl(f: &FileData, mtl_path: &Vec<PathBuf>) -> Result<Option<PathBuf>> {
     let el = ExpectedLine::new(
-        Keyword::new("usemtl", f!("the {B}{BLU}.mlt{D} file to use")),
+        Keyword::new(
+            "usemtl",
+            f!("the {B}{BLU}.mlt{D} file to use, only one definition supported"),
+        ),
         Format::new("file.mtl", ExpectedSize::Fixed),
-        Occurence::ZeroOrMore,
+        Occurence::Optional,
     );
 
     let found = get_line(f, el)?;
     if found.is_empty() {
         return Ok(None);
     }
+    let pl = &found.0[0];
 
     let mut path = PathBuf::from(OBJ_PATH);
-    path.push(&found[0].0[0]);
-    let i = found[0].1;
+    path.push(&pl.0[0]);
+    let i = pl.1;
 
     if !mtl_path.contains(&path) {
         let unprocessed_line = f.content[i].clone();
