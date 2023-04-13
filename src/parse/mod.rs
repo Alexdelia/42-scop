@@ -2,7 +2,6 @@ mod load_dir;
 pub use load_dir::load_dir;
 mod file_data;
 use file_data::FileData;
-pub mod line;
 mod mtl;
 mod obj;
 
@@ -28,10 +27,10 @@ pub fn parse() -> Result<Vec<Object>> {
     }
 
     if ret.is_empty() {
-        Err(pfe!(
+        pfe!(
             f!("did not manage to load any {Y}object{D}"),
             h: f!("make sure you have at least one {G}valid {B}{BLU}.obj{D} file in {B}{M}{OBJ_PATH}{D}")
-        ))?
+        )?
     } else {
         Ok(ret)
     }

@@ -4,6 +4,8 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-yahmrslib = { git = "https://github.com/Alexdelia/yahmrslib.git", default-features = false, features = ["ansi", "hmerr"] }
+ansi = { git = "https://github.com/Alexdelia/yahmrslib.git" }
+hmerr = { git = "https://github.com/Alexdelia/yahmrslib.git" }
+spof = { git = "https://github.com/Alexdelia/yahmrslib.git" }
 glium = "0.32.1"
 image = "0.24.6"

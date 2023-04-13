@@ -1,5 +1,4 @@
 use crate::parse::load_dir;
-use crate::prelude::*;
 use crate::setting::TEXTURE_PATH;
 
 enum LoadError {

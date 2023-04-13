@@ -1,10 +1,9 @@
 use crate::prelude::*;
 
-use super::FileData;
-use crate::parse::line::{get_line, ExpectedLine, ExpectedSize, Format, Keyword, Occurence};
 use crate::setting::OBJ_PATH;
 
 use ansi::abbrev::{B, BLU, D, Y};
+use spof::{get_line, ExpectedLine, ExpectedSize, FileData, Format, Keyword, Occurence};
 
 use std::path::PathBuf;
 
@@ -12,7 +11,7 @@ pub fn get_material(f: &FileData, mtl_path: &Vec<PathBuf>) -> Result<Option<Path
     let el = ExpectedLine::new(
         Keyword::new("usemtl", f!("the {B}{BLU}.mlt{D} file to use")),
         Format::new("file.mtl", ExpectedSize::Fixed),
-        Occurence::Optional,
+        Occurence::ZeroOrMore,
     );
 
     let found = get_line(f, el)?;
@@ -28,12 +27,12 @@ pub fn get_material(f: &FileData, mtl_path: &Vec<PathBuf>) -> Result<Option<Path
         let unprocessed_line = f.content[i].clone();
         let l = unprocessed_line.len();
 
-        return Err(pfe!(
+        pfe!(
             f!("cannot find {B}{Y}{path}{D} for {B}{Y}{obj}{D}", path = path.display(), obj = f.name),
             h:"make sure you have a valid {B}{G}.mtl{D} file in the {G}same directory{D} as the {B}{BLU}.obj{D} file",
             f:f.name.clone(),
             l:ple!(unprocessed_line, i:i, w:pwe!((0, l)))
-        ))?;
+        )?;
     }
 
     return Ok(Some(path));
