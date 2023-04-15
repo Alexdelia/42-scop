@@ -1,7 +1,3 @@
-// mod newmtl;
-// use newmtl::newmtl;
-// mod ka;
-// use ka::ka;
 mod rule;
 
 use crate::prelude::*;
