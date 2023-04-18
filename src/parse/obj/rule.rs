@@ -38,17 +38,42 @@ pub fn mtl_rule() -> Rule {
             "V1[/VT1][/VN1] V2[/VT2][/VN2] V3[/VT3][/VN3] ...",
             (3, usize::MAX),
             ZeroOrMore,
-            f!("face {B}{M}V1	{D} {B}{M}V2{D} {B}{M}V3{D} ...")
+            f!("face {B}{M}V1{D} {B}{M}V2{D} {B}{M}V3{D} ...")
         ),
-		(
-			"mtllib",
-			
         (
-            "usemtl",
+            "mtllib",
             "file.mtl",
             Fixed,
             Optional,
             f!("the {B}{BLU}.mlt{D} file to use, only one definition supported")
+        ),
+        (
+            "usemtl",
+            "material_name",
+            Fixed,
+            Optional,
+            f!("the {B}{BLU}.mlt{D} file to use, only one definition supported")
+        ),
+        (
+            "o",
+            "object_name",
+            Fixed,
+            Optional,
+            f!("the {B}{M}name{D} of the {B}{BLU}object{D}, only one definition supported")
+        ),
+        (
+            "g",
+            "group_name",
+            Fixed,
+            Optional,
+            f!("the {B}{M}name{D} of the {B}{BLU}group{D}, only one definition supported")
+        ),
+        (
+            "s",
+            "<off | 0 | 1 | on>",
+            Fixed,
+            Optional,
+            f!("the smooth shading {B}{M}state{D}, only one definition supported")
         ),
     )
 }
