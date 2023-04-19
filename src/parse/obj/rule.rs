@@ -1,6 +1,6 @@
 use crate::prelude::*;
 
-use ansi::abbrev::{B, BLU, D, GRE, M, Y};
+use ansi::abbrev::{B, BLU, D, M};
 use spof::{rule, Rule};
 
 pub const COMMENT: &str = "#";

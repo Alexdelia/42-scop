@@ -39,7 +39,7 @@ pub fn usemtl(f: &FileData, mtl_path: &Vec<PathBuf>) -> Result<Option<PathBuf>> 
         )?;
     }
 
-    return Ok(Some(path));
+    Ok(Some(path));
 
     Ok(None)
 }

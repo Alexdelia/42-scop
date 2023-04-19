@@ -1,6 +1,6 @@
 use crate::prelude::*;
 
-use ansi::abbrev::{B, BLU, G, Y};
+use ansi::abbrev::{B, BLU, G};
 use ansi::RESET as DEF;
 use spof::{rule, Rule};
 
