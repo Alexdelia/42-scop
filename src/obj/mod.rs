@@ -1,7 +1,7 @@
 mod vertex;
-pub use vertex::Vertex;
+pub use vertex::{Vertex, VertexPrecision};
 mod color;
-pub use color::Color;
+pub use color::{Color, ColorPrecision};
 mod material;
 pub use material::Material;
 
@@ -45,15 +45,15 @@ impl Object {
 }
 
 pub struct VertexNormal {
-    pub x: f32,
-    pub y: f32,
-    pub z: f32,
+    pub x: VertexPrecision,
+    pub y: VertexPrecision,
+    pub z: VertexPrecision,
 }
 
 pub struct VertexTexture {
-    pub u: f32, // horizontal texture coordinate
-    pub v: f32, // vertical texture coordinate
-    pub w: f32, // depth
+    pub u: VertexPrecision, // horizontal texture coordinate
+    pub v: VertexPrecision, // vertical texture coordinate
+    pub w: VertexPrecision, // depth
 }
 
 impl Default for VertexTexture {

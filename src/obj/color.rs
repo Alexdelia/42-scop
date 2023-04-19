@@ -1,4 +1,4 @@
-type ColorPrecision = f32;
+pub type ColorPrecision = f32;
 
 pub struct Color {
     pub r: ColorPrecision,

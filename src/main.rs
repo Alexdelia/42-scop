@@ -10,7 +10,7 @@ mod setting;
 
 use prelude::*;
 
-pub use obj::{Color, Object, Vertex};
+pub use obj::{Color, ColorPrecision, Object, Vertex, VertexPrecision};
 
 use env::Env;
 use event::EventOut;

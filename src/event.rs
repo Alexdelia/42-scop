@@ -1,5 +1,5 @@
 use crate::env::Env;
-use crate::Color;
+use crate::{Color, ColorPrecision};
 
 use glium::glutin::{
     dpi::PhysicalPosition,
@@ -73,8 +73,8 @@ impl Env {
         // println!("CursorMoved:\n\tposition:\t{:?}", position);
         let (w, h) = self.display.get_framebuffer_dimensions();
         self.setting.bg_color = Color {
-            r: position.x as f32 / w as f32,
-            g: position.y as f32 / h as f32,
+            r: position.x as ColorPrecision / w as ColorPrecision,
+            g: position.y as ColorPrecision / h as ColorPrecision,
             b: 0.0,
             a: 0.5,
         };
