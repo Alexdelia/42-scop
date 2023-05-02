@@ -1,6 +1,6 @@
 use crate::prelude::*;
 
-use super::rule::{MTLLIB, USEMTL};
+use super::RuleObj;
 use crate::obj::Material;
 use crate::setting::OBJ_PATH;
 
@@ -10,10 +10,11 @@ use spof::{FoundLine, SpofedFile};
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
 
-pub fn get_mtl(f: &SpofedFile, mtl_path: &Vec<PathBuf>) -> Result<Option<PathBuf>> {
-    let Some(mtl) = f.get(MTLLIB) else {
-		return Ok(None);
-	};
+pub fn get_mtl(f: &SpofedFile<RuleObj>, mtl_path: &Vec<PathBuf>) -> Result<Option<PathBuf>> {
+    let mtl = f[RuleObj::MTLLIB].data;
+    if mtl.is_empty() {
+        return Ok(None);
+    }
 
     let pl = mtl.get_once();
     let mut path = PathBuf::from(OBJ_PATH);
@@ -31,14 +32,15 @@ pub fn get_mtl(f: &SpofedFile, mtl_path: &Vec<PathBuf>) -> Result<Option<PathBuf
     Ok(Some(path))
 }
 
-pub fn check_usemtl(f: &SpofedFile, mtl: &Option<Material>) -> Result<bool> {
+pub fn check_usemtl(f: &SpofedFile<RuleObj>, mtl: &Option<Material>) -> Result<bool> {
     let Some(mtl) = mtl else {
 		return Ok(false);
 	};
 
-    let Some(fl) = f.get(USEMTL) else {
-		return Ok(false);
-	};
+    let fl = f[RuleObj::USEMTL].data;
+    if fl.is_empty() {
+        return Ok(false);
+    }
 
     let usemtl = fl.get_first_token();
 
@@ -48,7 +50,7 @@ pub fn check_usemtl(f: &SpofedFile, mtl: &Option<Material>) -> Result<bool> {
             h:f!(
                 "{B}{BLU}{path}{D} uses material {B}{Y}{usemtl}{D} but the material name in {B}{BLU}{mtl_path}{D} is {B}{Y}{mtl}{D}",
                 path = f.path.display(),
-                mtl_path = f.get(MTLLIB).unwrap().get_first_token(),
+                mtl_path = f[RuleObj::MTLLIB].data.get_first_token(),
                 mtl = mtl.name
             ),
             f:f.path.to_string_lossy().to_string(),

@@ -1,21 +1,36 @@
-// mod usemtl;
-// use usemtl::usemtl;
 mod handle_mtl;
 use handle_mtl::{check_usemtl, get_mtl};
-mod rule;
 mod vertex;
 
-use crate::{prelude::*, VertexPrecision};
+use crate::prelude::*;
 
 use super::mtl::parse as mtl_parse;
-use crate::Object;
+use crate::{Object, VertexPrecision};
 
-use spof::{FoundLine, SpofedFile};
+use ansi::abbrev::{B, BLU, D, M};
+use spof::{rule, FileDataKey, FoundLine, SpofedFile};
 
 use std::path::{Path, PathBuf};
 
+const COMMENT: &str = "#";
+
+rule!(
+    enum RuleObj {
+        V => "v", "X Y Z [W]", (3, 4), ZeroOrMore, f!("vertex {B}{M}X{D} {B}{M}Y{D} {B}{M}Z{D} {B}{M}W{D}"),
+        VT => "vt", "U V [W]", (2, 3), ZeroOrMore, f!("texture coordinate {B}{M}U{D} {B}{M}V{D} {B}{M}W{D}"),
+        VN => "vn", "X Y Z", Fixed, ZeroOrMore, f!("vertex normal {B}{M}X{D} {B}{M}Y{D} {B}{M}Z{D}"),
+        VP => "vp", "U [V] [W]", (1, 3), ZeroOrMore, f!("parameter space vertices {B}{M}U{D} {B}{M}V{D} {B}{M}W{D}"),
+        F => "f", "V1[/VT1][/VN1] V2[/VT2][/VN2] V3[/VT3][/VN3] ...", (3, usize::MAX), ZeroOrMore, f!("face {B}{M}V1{D} {B}{M}V2{D} {B}{M}V3{D} ..."),
+        MTLLIB => "mtllib", "file.mtl", Fixed, Optional, f!("the {B}{BLU}.mlt{D} file to use, only one definition supported"),
+        USEMTL => "usemtl", "material_name", Fixed, Optional, f!("the {B}{BLU}.mlt{D} file to use, only one definition supported"),
+        O => "o", "object_name", Fixed, Optional, f!("the {B}{M}name{D} of the {B}{BLU}object{D}, only one definition supported"),
+        G => "g", "group_name", Fixed, Optional, f!("the {B}{M}name{D} of the {B}{BLU}group{D}, only one definition supported"),
+        S => "s", "group_number", Fixed, Optional, f!("the {B}{M}number{D} of the {B}{BLU}smoothing group{D}, only one definition supported"),
+    }
+);
+
 pub fn parse(obj_path: &Path, mtl_path: &Vec<PathBuf>) -> Result<Object> {
-    let f = SpofedFile::new(obj_path, Some(rule::COMMENT), rule::obj_rule())?;
+    let f = SpofedFile::new(obj_path, Some(COMMENT), RuleObj::build())?;
 
     let mtl = if let Some(p) = get_mtl(&f, mtl_path)? {
         Some(mtl_parse(&p)?)
@@ -24,8 +39,10 @@ pub fn parse(obj_path: &Path, mtl_path: &Vec<PathBuf>) -> Result<Object> {
     };
 
     let usemtl = check_usemtl(&f, &mtl)?;
-
-    // parse vertices
+    let v = f[RuleObj::V].data.parse::<VertexPrecision>()?;
+    let v = f.parse::<VertexPrecision>(rule::V).unwrap()?;
+    let vn = f.parse::<VertexPrecision>(rule::VN).unwrap()?;
+    let vt = f.parse::<VertexPrecision>(rule::VT).unwrap()?;
 
     todo!()
 }
