@@ -10,8 +10,8 @@ use spof::{FoundLine, SpofedFile};
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
 
-pub fn get_mtl(f: &SpofedFile<RuleObj>, mtl_path: &Vec<PathBuf>) -> Result<Option<PathBuf>> {
-    let mtl = f[RuleObj::MTLLIB].data;
+pub fn get_mtl(f: &SpofedFile<RuleObj>, mtl_path: &[PathBuf]) -> Result<Option<PathBuf>> {
+    let mtl = &f[RuleObj::Mtllib].data;
     if mtl.is_empty() {
         return Ok(None);
     }
@@ -37,7 +37,7 @@ pub fn check_usemtl(f: &SpofedFile<RuleObj>, mtl: &Option<Material>) -> Result<b
 		return Ok(false);
 	};
 
-    let fl = f[RuleObj::USEMTL].data;
+    let fl = &f[RuleObj::Usemtl].data;
     if fl.is_empty() {
         return Ok(false);
     }
@@ -50,10 +50,10 @@ pub fn check_usemtl(f: &SpofedFile<RuleObj>, mtl: &Option<Material>) -> Result<b
             h:f!(
                 "{B}{BLU}{path}{D} uses material {B}{Y}{usemtl}{D} but the material name in {B}{BLU}{mtl_path}{D} is {B}{Y}{mtl}{D}",
                 path = f.path.display(),
-                mtl_path = f[RuleObj::MTLLIB].data.get_first_token(),
+                mtl_path = f[RuleObj::Mtllib].data.get_first_token(),
                 mtl = mtl.name
             ),
-            f:f.path.to_string_lossy().to_string(),
+            f:f.name(),
             l:fl.get_once().clone().into(),
         )?;
     }

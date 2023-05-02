@@ -1,5 +1,6 @@
 mod handle_mtl;
 use handle_mtl::{check_usemtl, get_mtl};
+use hmerr::ParseFileError;
 mod vertex;
 
 use crate::prelude::*;
@@ -15,21 +16,21 @@ use std::path::{Path, PathBuf};
 const COMMENT: &str = "#";
 
 rule!(
-    enum RuleObj {
+    pub enum RuleObj {
         V => "v", "X Y Z [W]", (3, 4), ZeroOrMore, f!("vertex {B}{M}X{D} {B}{M}Y{D} {B}{M}Z{D} {B}{M}W{D}"),
-        VT => "vt", "U V [W]", (2, 3), ZeroOrMore, f!("texture coordinate {B}{M}U{D} {B}{M}V{D} {B}{M}W{D}"),
-        VN => "vn", "X Y Z", Fixed, ZeroOrMore, f!("vertex normal {B}{M}X{D} {B}{M}Y{D} {B}{M}Z{D}"),
-        VP => "vp", "U [V] [W]", (1, 3), ZeroOrMore, f!("parameter space vertices {B}{M}U{D} {B}{M}V{D} {B}{M}W{D}"),
+        Vt => "vt", "U V [W]", (2, 3), ZeroOrMore, f!("texture coordinate {B}{M}U{D} {B}{M}V{D} {B}{M}W{D}"),
+        Vn => "vn", "X Y Z", Fixed, ZeroOrMore, f!("vertex normal {B}{M}X{D} {B}{M}Y{D} {B}{M}Z{D}"),
+        Vp => "vp", "U [V] [W]", (1, 3), ZeroOrMore, f!("parameter space vertices {B}{M}U{D} {B}{M}V{D} {B}{M}W{D}"),
         F => "f", "V1[/VT1][/VN1] V2[/VT2][/VN2] V3[/VT3][/VN3] ...", (3, usize::MAX), ZeroOrMore, f!("face {B}{M}V1{D} {B}{M}V2{D} {B}{M}V3{D} ..."),
-        MTLLIB => "mtllib", "file.mtl", Fixed, Optional, f!("the {B}{BLU}.mlt{D} file to use, only one definition supported"),
-        USEMTL => "usemtl", "material_name", Fixed, Optional, f!("the {B}{BLU}.mlt{D} file to use, only one definition supported"),
+        Mtllib => "mtllib", "file.mtl", Fixed, Optional, f!("the {B}{BLU}.mlt{D} file to use, only one definition supported"),
+        Usemtl => "usemtl", "material_name", Fixed, Optional, f!("the {B}{BLU}.mlt{D} file to use, only one definition supported"),
         O => "o", "object_name", Fixed, Optional, f!("the {B}{M}name{D} of the {B}{BLU}object{D}, only one definition supported"),
         G => "g", "group_name", Fixed, Optional, f!("the {B}{M}name{D} of the {B}{BLU}group{D}, only one definition supported"),
         S => "s", "group_number", Fixed, Optional, f!("the {B}{M}number{D} of the {B}{BLU}smoothing group{D}, only one definition supported"),
     }
 );
 
-pub fn parse(obj_path: &Path, mtl_path: &Vec<PathBuf>) -> Result<Object> {
+pub fn parse(obj_path: &Path, mtl_path: &[PathBuf]) -> Result<Object> {
     let f = SpofedFile::new(obj_path, Some(COMMENT), RuleObj::build())?;
 
     let mtl = if let Some(p) = get_mtl(&f, mtl_path)? {
@@ -39,10 +40,9 @@ pub fn parse(obj_path: &Path, mtl_path: &Vec<PathBuf>) -> Result<Object> {
     };
 
     let usemtl = check_usemtl(&f, &mtl)?;
-    let v = f[RuleObj::V].data.parse::<VertexPrecision>()?;
-    let v = f.parse::<VertexPrecision>(rule::V).unwrap()?;
-    let vn = f.parse::<VertexPrecision>(rule::VN).unwrap()?;
-    let vt = f.parse::<VertexPrecision>(rule::VT).unwrap()?;
+    let v = f.parse::<VertexPrecision>(RuleObj::V)?;
+    let vn = f.parse::<VertexPrecision>(RuleObj::Vn)?;
+    let vt = f.parse::<VertexPrecision>(RuleObj::Vt)?;
 
     todo!()
 }
