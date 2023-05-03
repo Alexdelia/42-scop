@@ -1,7 +1,6 @@
 mod handle_mtl;
 use handle_mtl::{check_usemtl, get_mtl};
 use hmerr::ParseFileError;
-mod vertex;
 
 use crate::prelude::*;
 
