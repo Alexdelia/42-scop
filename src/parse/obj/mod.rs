@@ -1,6 +1,6 @@
+mod face;
 mod handle_mtl;
 use handle_mtl::{check_usemtl, get_mtl};
-use hmerr::ParseFileError;
 
 use crate::prelude::*;
 
@@ -8,6 +8,7 @@ use super::mtl::parse as mtl_parse;
 use crate::{Object, VertexPrecision};
 
 use ansi::abbrev::{B, BLU, D, M};
+use hmerr::ParseFileError;
 use spof::{rule, FileDataKey, FoundLine, SpofedFile};
 
 use std::path::{Path, PathBuf};
@@ -42,6 +43,8 @@ pub fn parse(obj_path: &Path, mtl_path: &[PathBuf]) -> Result<Object> {
     let v = f.parse::<VertexPrecision>(RuleObj::V)?;
     let vn = f.parse::<VertexPrecision>(RuleObj::Vn)?;
     let vt = f.parse::<VertexPrecision>(RuleObj::Vt)?;
+    let vp = f.parse::<VertexPrecision>(RuleObj::Vp)?;
+    let f = face::parse(&f)?;
 
     todo!()
 }
