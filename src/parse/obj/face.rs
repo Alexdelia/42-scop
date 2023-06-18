@@ -9,7 +9,7 @@ use spof::SpofedFile;
 use std::num::ParseIntError;
 use std::str::FromStr;
 
-enum ParseFaceError {
+pub enum ParseFaceError {
     Int(ParseIntError),
     Format(String),
 }
@@ -69,4 +69,6 @@ impl FromStr for EFace {
     }
 }
 
-pub fn parse(f: &SpofedFile<RuleObj>) -> Result<Vec<Face>> {}
+pub fn parse(f: &SpofedFile<RuleObj>) -> Result<Vec<Face>> {
+    todo!()
+}

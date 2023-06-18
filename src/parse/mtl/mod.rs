@@ -35,5 +35,6 @@ rule! (
 
 pub fn parse(path: &Path) -> Result<Material> {
     let f = SpofedFile::new(path, Some(COMMENT), RuleMtl::build())?;
+    dbg!(f);
     todo!()
 }
