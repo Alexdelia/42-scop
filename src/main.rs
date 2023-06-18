@@ -19,6 +19,7 @@ use glium::glutin;
 
 fn main() -> Result<()> {
     let obj = parse::parse()?;
+    dbg!(obj.len());
 
     event_loop()
 }
