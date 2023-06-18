@@ -33,11 +33,12 @@ rule!(
 pub fn parse(obj_path: &Path, mtl_path: &[PathBuf]) -> Result<Object> {
     let f = SpofedFile::new(obj_path, Some(COMMENT), RuleObj::build())?;
 
-    let mtl = if let Some(p) = get_mtl(&f, mtl_path)? {
-        Some(mtl_parse(&p)?)
-    } else {
-        None
-    };
+    // let mtl = if let Some(p) = get_mtl(&f, mtl_path)? {
+    //     Some(mtl_parse(&p)?)
+    // } else {
+    //     None
+    // };
+    let mtl = None;
 
     let usemtl = check_usemtl(&f, &mtl)?;
     let v = f.parse::<VertexPrecision>(RuleObj::V)?;

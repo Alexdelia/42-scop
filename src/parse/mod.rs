@@ -22,7 +22,7 @@ pub fn parse() -> Result<Vec<Object>> {
     for o in obj {
         match obj::parse(&o, &mtl) {
             Ok(obj) => ret.push(obj),
-            Err(e) => warn!("cannot load {} caused by:\n{e}", o.display()),
+            Err(e) => warn!("cannot load {B}{M}{}{D} caused by:\n{Y}{e}{D}", o.display()),
         }
     }
 
