@@ -2,7 +2,7 @@ use crate::prelude::*;
 
 use crate::obj::Material;
 
-use ansi::abbrev::{B, BLU, D, G};
+use ansi::abbrev::{B, BLU, D, G, N_C};
 use spof::{rule, FileDataKey, SpofedFile};
 
 use std::path::Path;
@@ -11,7 +11,7 @@ const COMMENT: &str = "#";
 
 rule! (
     enum RuleMtl {
-        Newmtl => "newmtl", "material_name", Fixed, Once, f!("the {B}{G}name{D} of the {B}{BLU}material{D}, only one definition supported"),
+        Newmtl => "newmtl", "material_name", Fixed, Once, f!("the {G}name{N_C} of the {BLU}material{N_C}, only one definition supported"),
         Ka => "Ka", "R G B", Fixed, Once, "the ambiant color",
         Kd => "Kd", "R G B", Fixed, Once, "the diffuse color",
         Ks => "Ks", "R G B", Fixed, Once, "the specular color",

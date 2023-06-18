@@ -44,7 +44,35 @@ pub fn parse(obj_path: &Path, mtl_path: &[PathBuf]) -> Result<Object> {
     let vn = f.parse::<VertexPrecision>(RuleObj::Vn)?;
     let vt = f.parse::<VertexPrecision>(RuleObj::Vt)?;
     let vp = f.parse::<VertexPrecision>(RuleObj::Vp)?;
-    let f = face::parse(&f)?;
+    // let f = face::parse(&f)?;index
+    let name = f[RuleObj::O].data.first_token().map_or_else(
+        || obj_path.file_stem().unwrap().to_str().unwrap().to_string(),
+        |t| t.to_string(),
+    );
+    let group = f[RuleObj::G].data.first_token().map(|t| t.to_string());
 
-    todo!()
+    // TMP
+    let v = v
+        .into_iter()
+        .map(|vertices| crate::Vertex {
+            position: [vertices[0], vertices[1], vertices[2], 1.0],
+            color: [1.0, 0.0, 0.0, 1.0],
+            texture: [0.0, 0.0],
+        })
+        .collect();
+
+    Ok(Object {
+        name,
+        group,
+        vertex: v,
+        // texture: vt,
+        texture: vec![],
+        // normal: vn,
+        normal: vec![],
+        // parameter_space: vp,
+        // face: face::parse(&f)?,
+        face: vec![],
+        material: if usemtl { mtl } else { None },
+        smooth: false,
+    })
 }
