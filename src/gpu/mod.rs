@@ -1,21 +1,39 @@
 mod load_texture;
 mod render;
-use load_texture::load_texture;
 
 use crate::prelude::*;
-use crate::Vertex;
+
+use crate::{Object, Vertex};
+
+use load_texture::load_texture;
+
+pub enum TextureSource {
+    Original,
+    Modified,
+    None,
+}
 
 pub struct Gpu {
     pub program: glium::Program,
-    pub vertex_buffer: glium::VertexBuffer<Vertex>,
-    pub index_buffer: glium::index::NoIndices,
-    texture: Vec<glium::texture::SrgbTexture2d>,
-    texture_index: usize,
-    pub texture_on: bool,
+    pub object: Vec<(glium::VertexBuffer<Vertex>, glium::index::NoIndices)>,
+    pub external_texture: (Vec<glium::texture::SrgbTexture2d>, usize),
+    pub texture_source: TextureSource,
 }
 
 impl Gpu {
-    pub fn new(display: &glium::Display) -> Result<Self> {
+    pub fn new(display: &glium::Display, object: Vec<Object>) -> Result<Self> {
+        let mut obj_data = Vec::new();
+
+        for o in object {
+            let vertex_buffer = glium::VertexBuffer::new(display, &o.vertex)?;
+            let index_buffer = glium::index::IndexBuffer::new(
+                display,
+                glium::index::PrimitiveType::TrianglesList,
+                &o.index,
+            )?;
+            todo!();
+        }
+
         let shape = vec![
             Vertex {
                 position: [0.0, 0.5, 0.0, 1.0],
@@ -38,17 +56,15 @@ impl Gpu {
         let index_buffer = glium::index::NoIndices(glium::index::PrimitiveType::TrianglesList);
 
         Ok(Self {
-            vertex_buffer,
-            index_buffer,
             program: glium::Program::from_source(
                 display,
                 include_str!("main.vert"),
                 include_str!("main.frag"),
                 None,
             )?,
-            texture: load_texture(display),
-            texture_index: 0,
-            texture_on: false,
+            object: obj_data,
+            external_texture: (load_texture(display), 0),
+            texture_source: TextureSource::Original,
         })
     }
 

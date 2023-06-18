@@ -68,7 +68,3 @@ impl FromStr for EFace {
         })
     }
 }
-
-pub fn parse(f: &SpofedFile<RuleObj>) -> Result<Vec<Face>> {
-    todo!()
-}

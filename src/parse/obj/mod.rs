@@ -5,6 +5,7 @@ use handle_mtl::{check_usemtl, get_mtl};
 use crate::prelude::*;
 
 use super::mtl::parse as mtl_parse;
+use crate::obj::{EFace, Face};
 use crate::{Object, VertexPrecision};
 
 use ansi::abbrev::{B, BLU, D, M};
@@ -45,7 +46,8 @@ pub fn parse(obj_path: &Path, mtl_path: &[PathBuf]) -> Result<Object> {
     let vn = f.parse::<VertexPrecision>(RuleObj::Vn)?;
     let vt = f.parse::<VertexPrecision>(RuleObj::Vt)?;
     let vp = f.parse::<VertexPrecision>(RuleObj::Vp)?;
-    // let f = face::parse(&f)?;index
+    // let face = face::parse(&f)?;
+    let face: Vec<Face> = f.parse::<EFace>(RuleObj::F)?;
     let name = f[RuleObj::O].data.first_token().map_or_else(
         || obj_path.file_stem().unwrap().to_str().unwrap().to_string(),
         |t| t.to_string(),
@@ -71,8 +73,7 @@ pub fn parse(obj_path: &Path, mtl_path: &[PathBuf]) -> Result<Object> {
         // normal: vn,
         normal: vec![],
         // parameter_space: vp,
-        // face: face::parse(&f)?,
-        face: vec![],
+        face,
         material: if usemtl { mtl } else { None },
         smooth: false,
     })

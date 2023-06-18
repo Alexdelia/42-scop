@@ -18,15 +18,14 @@ use event::EventOut;
 use glium::glutin;
 
 fn main() -> Result<()> {
-    let obj = parse::parse()?;
-    dbg!(obj.len());
+    let object = parse::parse()?;
 
-    event_loop()
+    event_loop(object)
 }
 
-pub fn event_loop() -> Result<()> {
+pub fn event_loop(object: Vec<Object>) -> Result<()> {
     let mut event_loop = glutin::event_loop::EventLoop::new();
-    let mut env = Env::new(&event_loop)?;
+    let mut env = Env::new(&event_loop, object)?;
 
     const BASE: f32 = -180.0;
     const SHIFT: f32 = 0.001;

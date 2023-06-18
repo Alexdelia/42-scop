@@ -1,6 +1,7 @@
 use crate::prelude::*;
 
 use crate::setting::Setting;
+use crate::Object;
 
 use glium::glutin::{self, window::Icon};
 
@@ -10,10 +11,14 @@ pub struct Env {
     pub display: glium::Display,
     pub gpu: crate::gpu::Gpu,
     pub setting: Setting,
+    pub object: Vec<Object>,
 }
 
 impl Env {
-    pub fn new(event_loop: &glutin::event_loop::EventLoop<()>) -> Result<Self> {
+    pub fn new(
+        event_loop: &glutin::event_loop::EventLoop<()>,
+        object: Vec<Object>,
+    ) -> Result<Self> {
         let setting = Setting::default();
         let display = glium::Display::new(
             glutin::window::WindowBuilder::new()
@@ -40,6 +45,7 @@ impl Env {
             display,
             gpu,
             setting,
+            object,
         })
     }
 }
