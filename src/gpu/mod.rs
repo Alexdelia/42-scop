@@ -21,7 +21,7 @@ pub struct Gpu {
 }
 
 impl Gpu {
-    pub fn new(display: &glium::Display, object: Vec<Object>) -> Result<Self> {
+    pub fn new(display: &glium::Display, object: &[Object]) -> Result<Self> {
         let mut obj_data = Vec::new();
 
         for o in object {
@@ -29,9 +29,9 @@ impl Gpu {
             let index_buffer = glium::index::IndexBuffer::new(
                 display,
                 glium::index::PrimitiveType::TrianglesList,
-                &o.index,
+                &o.triangulation(),
             )?;
-            todo!();
+            // todo!();
         }
 
         let shape = vec![
@@ -55,6 +55,9 @@ impl Gpu {
         let vertex_buffer = glium::VertexBuffer::new(display, &shape)?;
         let index_buffer = glium::index::NoIndices(glium::index::PrimitiveType::TrianglesList);
 
+        // tmp
+        obj_data.push((vertex_buffer, index_buffer));
+
         Ok(Self {
             program: glium::Program::from_source(
                 display,
@@ -69,18 +72,18 @@ impl Gpu {
     }
 
     pub fn get_texture(&self) -> &glium::texture::SrgbTexture2d {
-        &self.texture[self.texture_index]
+        &self.external_texture.0[self.external_texture.1]
     }
 
     pub fn next_texture(&mut self) {
-        self.texture_index = (self.texture_index + 1) % self.texture.len();
+        self.external_texture.1 = (self.external_texture.1 + 1) % self.external_texture.0.len();
     }
 
     pub fn prev_texture(&mut self) {
-        self.texture_index = if self.texture_index == 0 {
-            self.texture.len() - 1
+        self.external_texture.1 = if self.external_texture.1 == 0 {
+            self.external_texture.0.len() - 1
         } else {
-            self.texture_index - 1
+            self.external_texture.1 - 1
         };
     }
 }

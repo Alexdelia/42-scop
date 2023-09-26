@@ -41,10 +41,10 @@ impl Env {
     fn key_simple(&mut self, key: VirtualKeyCode) -> EventOut {
         match key {
             VirtualKeyCode::Escape => EventOut::ControlFlow(ControlFlow::Exit),
-            VirtualKeyCode::T => {
-                self.gpu.texture_on = !self.gpu.texture_on;
-                EventOut::None
-            }
+            // VirtualKeyCode::T => {
+            //     self.gpu.texture_on = !self.gpu.texture_on;
+            //     EventOut::None
+            // }
             VirtualKeyCode::Y => {
                 self.gpu.prev_texture();
                 EventOut::None

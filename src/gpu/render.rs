@@ -16,13 +16,16 @@ impl Env {
         let uniform = glium::uniform! {
             matrix: rotate_matrix(rotate_angle),
             tex: self.gpu.get_texture(),
-            texture_on: self.gpu.texture_on,
+            // texture_on: self.gpu.texture_on,
+            texture_on: true,
         };
 
         frame
             .draw(
-                &self.gpu.vertex_buffer,
-                &self.gpu.index_buffer,
+                // &self.gpu.vertex_buffer,
+                // &self.gpu.index_buffer,
+                &self.gpu.object[0].0,
+                &self.gpu.object[0].1,
                 &self.gpu.program,
                 &uniform,
                 &Default::default(),

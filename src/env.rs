@@ -39,7 +39,7 @@ impl Env {
             );
             frame.finish().unwrap();
         }
-        let gpu = crate::gpu::Gpu::new(&display)?;
+        let gpu = crate::gpu::Gpu::new(&display, &object)?;
 
         Ok(Self {
             display,
@@ -52,9 +52,9 @@ impl Env {
 
 fn load_icon(path: &Path) -> Option<Icon> {
     let Ok(image) = image::open(path) else {
-		eprintln!("failed to open icon path '{}'", path.display());
-		return None;
-	};
+        eprintln!("failed to open icon path '{}'", path.display());
+        return None;
+    };
     let image = image.into_rgba8();
     let (w, h) = image.dimensions();
     if let Ok(icon) = Icon::from_rgba(image.into_raw(), w, h) {

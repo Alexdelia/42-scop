@@ -42,6 +42,21 @@ impl Object {
             ..Default::default()
         }
     }
+
+    // index buffer
+    pub fn triangulation(&self) -> Vec<u32> {
+        let mut result = Vec::new();
+
+        for face in &self.face {
+            for i in 1..face.len() - 1 {
+                result.push(face[0].vertex as u32);
+                result.push(face[i].vertex as u32);
+                result.push(face[i + 1].vertex as u32);
+            }
+        }
+
+        result
+    }
 }
 
 pub struct VertexNormal {
