@@ -14,6 +14,7 @@ pub struct Setting {
     fps: Option<u8>,
     pub bg_color: Color,
     pub rotate: bool,
+    pub zoom_amount: f32,
 }
 
 impl Default for Setting {
@@ -24,6 +25,7 @@ impl Default for Setting {
             fps: None,
             bg_color: Color::new(0.0, 0.0, 0.0, 0.0),
             rotate: true,
+            zoom_amount: 1.0,
         }
     }
 }

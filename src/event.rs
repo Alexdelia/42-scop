@@ -3,7 +3,7 @@ use crate::{Color, ColorPrecision};
 
 use glium::glutin::{
     dpi::PhysicalPosition,
-    event::{ElementState, Event, KeyboardInput, VirtualKeyCode, WindowEvent},
+    event::{ElementState, Event, KeyboardInput, MouseScrollDelta, VirtualKeyCode, WindowEvent},
     event_loop::ControlFlow,
 };
 
@@ -19,6 +19,7 @@ impl Env {
                 WindowEvent::CloseRequested => return EventOut::ControlFlow(ControlFlow::Exit),
                 WindowEvent::KeyboardInput { input, .. } => self.key(input),
                 WindowEvent::CursorMoved { position, .. } => self.cursor(&position),
+                WindowEvent::MouseWheel { delta, .. } => self.wheel(delta),
                 _ => EventOut::None,
             },
             _ => EventOut::None,
@@ -57,6 +58,22 @@ impl Env {
                 self.setting.rotate = !self.setting.rotate;
                 EventOut::None
             }
+            VirtualKeyCode::Right | VirtualKeyCode::D => {
+                self.gpu.next_object();
+                EventOut::None
+            }
+            VirtualKeyCode::Left | VirtualKeyCode::A | VirtualKeyCode::Q => {
+                self.gpu.prev_object();
+                EventOut::None
+            }
+            VirtualKeyCode::Up => {
+                self.setting.zoom_amount += 0.1;
+                EventOut::None
+            }
+            VirtualKeyCode::Down => {
+                self.setting.zoom_amount -= 0.1;
+                EventOut::None
+            }
             _ => {
                 eprintln!("no bind for {:?}", key);
                 EventOut::None
@@ -77,6 +94,20 @@ impl Env {
             g: position.y as ColorPrecision / h as ColorPrecision,
             b: 0.0,
             a: 0.5,
+        };
+        EventOut::None
+    }
+
+    fn wheel(&mut self, delta: MouseScrollDelta) -> EventOut {
+        match delta {
+            MouseScrollDelta::LineDelta(x, y) => {
+                println!("MouseScrollDelta::LineDelta({x}, {y})");
+                self.setting.zoom_amount += y as f32;
+            }
+            MouseScrollDelta::PixelDelta(position) => {
+                println!("MouseScrollDelta::PixelDelta({position:?})");
+                self.setting.zoom_amount += position.y as f32;
+            }
         };
         EventOut::None
     }

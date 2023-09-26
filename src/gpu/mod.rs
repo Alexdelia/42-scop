@@ -15,7 +15,10 @@ pub enum TextureSource {
 
 pub struct Gpu {
     pub program: glium::Program,
-    pub object: Vec<(glium::VertexBuffer<Vertex>, glium::index::NoIndices)>,
+    pub object: (
+        Vec<(glium::VertexBuffer<Vertex>, glium::index::IndexBuffer<u32>)>,
+        usize,
+    ),
     pub external_texture: (Vec<glium::texture::SrgbTexture2d>, usize),
     pub texture_source: TextureSource,
 }
@@ -25,12 +28,14 @@ impl Gpu {
         let mut obj_data = Vec::new();
 
         for o in object {
+            dbg!(&o.name);
             let vertex_buffer = glium::VertexBuffer::new(display, &o.vertex)?;
             let index_buffer = glium::index::IndexBuffer::new(
                 display,
                 glium::index::PrimitiveType::TrianglesList,
                 &o.triangulation(),
             )?;
+            obj_data.push((vertex_buffer, index_buffer));
             // todo!();
         }
 
@@ -56,7 +61,7 @@ impl Gpu {
         let index_buffer = glium::index::NoIndices(glium::index::PrimitiveType::TrianglesList);
 
         // tmp
-        obj_data.push((vertex_buffer, index_buffer));
+        // obj_data.push((vertex_buffer, index_buffer));
 
         Ok(Self {
             program: glium::Program::from_source(
@@ -65,10 +70,26 @@ impl Gpu {
                 include_str!("main.frag"),
                 None,
             )?,
-            object: obj_data,
+            object: (obj_data, 0),
             external_texture: (load_texture(display), 0),
             texture_source: TextureSource::Original,
         })
+    }
+
+    pub fn get_object(&self) -> &(glium::VertexBuffer<Vertex>, glium::index::IndexBuffer<u32>) {
+        &self.object.0[self.object.1]
+    }
+
+    pub fn next_object(&mut self) {
+        self.object.1 = (self.object.1 + 1) % self.object.0.len();
+    }
+
+    pub fn prev_object(&mut self) {
+        self.object.1 = if self.object.1 == 0 {
+            self.object.0.len() - 1
+        } else {
+            self.object.1 - 1
+        };
     }
 
     pub fn get_texture(&self) -> &glium::texture::SrgbTexture2d {
