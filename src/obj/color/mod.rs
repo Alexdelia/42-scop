@@ -1,5 +1,8 @@
+pub mod switch;
+
 pub type ColorPrecision = f32;
 
+#[derive(Clone, Debug)]
 pub struct Color {
     pub r: ColorPrecision,
     pub g: ColorPrecision,

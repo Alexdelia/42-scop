@@ -1,9 +1,10 @@
 mod vertex;
 pub use vertex::{Vertex, VertexPrecision};
 mod color;
-pub use color::{Color, ColorPrecision};
+pub use color::{switch::ColorType, Color, ColorPrecision};
 mod material;
 pub use material::Material;
+mod triangulate;
 
 // https://en.wikipedia.org/wiki/Wavefront_.obj_file
 // http://web.cse.ohio-state.edu/~shen.94/581/Site/Lab3_files/Labhelp_Obj_parser.htm
@@ -42,21 +43,6 @@ impl Object {
             ..Default::default()
         }
     }
-
-    // index buffer
-    pub fn triangulation(&self) -> Vec<u32> {
-        let mut result = Vec::new();
-
-        for face in &self.face {
-            for i in 1..face.len() - 1 {
-                result.push(face[0].vertex as u32);
-                result.push(face[i].vertex as u32);
-                result.push(face[i + 1].vertex as u32);
-            }
-        }
-
-        result
-    }
 }
 
 pub struct VertexNormal {
@@ -83,6 +69,7 @@ impl Default for VertexTexture {
 
 pub type Face = Vec<EFace>; // 3 or more elements
 
+#[derive(Clone, Copy)]
 pub struct EFace {
     pub vertex: usize,
     pub texture: Option<usize>,

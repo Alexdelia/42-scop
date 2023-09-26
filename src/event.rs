@@ -42,9 +42,12 @@ impl Env {
     fn key_simple(&mut self, key: VirtualKeyCode) -> EventOut {
         match key {
             VirtualKeyCode::Escape => EventOut::ControlFlow(ControlFlow::Exit),
-            // VirtualKeyCode::T => {
-            //     self.gpu.texture_on = !self.gpu.texture_on;
-            //     EventOut::None
+            VirtualKeyCode::T => {
+                self.gpu.texture_on = !self.gpu.texture_on;
+                EventOut::None
+            }
+            // VirtualKeyCode::C => {
+            // 	self.gpu.
             // }
             VirtualKeyCode::Y => {
                 self.gpu.prev_texture();
@@ -67,11 +70,11 @@ impl Env {
                 EventOut::None
             }
             VirtualKeyCode::Up => {
-                self.setting.zoom_amount += 0.1;
+                self.setting.zoom_amount -= 0.1;
                 EventOut::None
             }
             VirtualKeyCode::Down => {
-                self.setting.zoom_amount -= 0.1;
+                self.setting.zoom_amount += 0.1;
                 EventOut::None
             }
             _ => {
@@ -101,12 +104,10 @@ impl Env {
     fn wheel(&mut self, delta: MouseScrollDelta) -> EventOut {
         match delta {
             MouseScrollDelta::LineDelta(x, y) => {
-                println!("MouseScrollDelta::LineDelta({x}, {y})");
-                self.setting.zoom_amount += y as f32;
+                self.setting.zoom_amount -= y as f32;
             }
             MouseScrollDelta::PixelDelta(position) => {
-                println!("MouseScrollDelta::PixelDelta({position:?})");
-                self.setting.zoom_amount += position.y as f32;
+                self.setting.zoom_amount -= position.y as f32;
             }
         };
         EventOut::None

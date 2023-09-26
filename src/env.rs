@@ -31,11 +31,14 @@ impl Env {
         {
             use glium::Surface;
             let mut frame = display.draw();
-            frame.clear_color(
-                setting.bg_color.r,
-                setting.bg_color.g,
-                setting.bg_color.b,
-                setting.bg_color.a,
+            frame.clear_color_and_depth(
+                (
+                    setting.bg_color.r,
+                    setting.bg_color.g,
+                    setting.bg_color.b,
+                    setting.bg_color.a,
+                ),
+                1.0,
             );
             frame.finish().unwrap();
         }

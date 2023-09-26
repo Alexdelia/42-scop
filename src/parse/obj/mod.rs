@@ -5,12 +5,14 @@ use handle_mtl::{check_usemtl, get_mtl};
 use crate::prelude::*;
 
 use super::mtl::parse as mtl_parse;
-use crate::obj::{EFace, Face};
+use crate::obj::{ColorType, EFace, Face};
 use crate::{Object, VertexPrecision};
 
 use ansi::abbrev::{B, BLU, D, M};
 use hmerr::ParseFileError;
 use spof::{rule, FileDataKey, FoundLine, SpofedFile};
+
+use rand::Rng;
 
 use std::path::{Path, PathBuf};
 
@@ -42,10 +44,22 @@ pub fn parse(obj_path: &Path, mtl_path: &[PathBuf]) -> Result<Object> {
     let mtl = None;
 
     let usemtl = check_usemtl(&f, &mtl)?;
-    let v = f.parse::<VertexPrecision>(RuleObj::V)?;
-    let vn = f.parse::<VertexPrecision>(RuleObj::Vn)?;
-    let vt = f.parse::<VertexPrecision>(RuleObj::Vt)?;
-    let vp = f.parse::<VertexPrecision>(RuleObj::Vp)?;
+
+    // dummy vec to have the index starting at 0
+    let mut v = vec![vec![0.0, 0.0, 0.0]];
+    v.extend(f.parse::<VertexPrecision>(RuleObj::V)?);
+    let mut vn = vec![vec![0.0, 0.0, 0.0]];
+    vn.extend(f.parse::<VertexPrecision>(RuleObj::Vn)?);
+    let mut vt = vec![vec![0.0, 0.0]];
+    vt.extend(f.parse::<VertexPrecision>(RuleObj::Vt)?);
+    let mut vp = vec![vec![0.0]];
+    vp.extend(f.parse::<VertexPrecision>(RuleObj::Vp)?);
+
+    // let v = f.parse::<VertexPrecision>(RuleObj::V)?;
+    // let vn = f.parse::<VertexPrecision>(RuleObj::Vn)?;
+    // let vt = f.parse::<VertexPrecision>(RuleObj::Vt)?;
+    // let vp = f.parse::<VertexPrecision>(RuleObj::Vp)?;
+
     // let face = face::parse(&f)?;
     let face: Vec<Face> = f.parse::<EFace>(RuleObj::F)?;
     let name = f[RuleObj::O].data.first_token().map_or_else(
@@ -55,14 +69,22 @@ pub fn parse(obj_path: &Path, mtl_path: &[PathBuf]) -> Result<Object> {
     let group = f[RuleObj::G].data.first_token().map(|t| t.to_string());
 
     // TMP
-    let v = v
+    let mut rng = rand::thread_rng();
+    let mut v = v
         .into_iter()
         .map(|vertices| crate::Vertex {
-            position: [vertices[0], vertices[1], vertices[2], 1.0],
-            color: [1.0, 0.0, 0.0, 1.0],
-            texture: [0.0, 0.0],
+            position: [
+                vertices[0],
+                vertices[1],
+                vertices[2],
+                *vertices.get(3).unwrap_or(&1.0),
+            ],
+            texture: [rng.gen(), rng.gen()],
+            ..Default::default()
         })
         .collect();
+
+    ColorType::Random.apply(&mut v);
 
     Ok(Object {
         name,

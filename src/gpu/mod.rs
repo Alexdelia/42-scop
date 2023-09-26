@@ -3,24 +3,24 @@ mod render;
 
 use crate::prelude::*;
 
-use crate::{Object, Vertex};
+use crate::{obj::ColorType, Color, Object, Vertex};
 
 use load_texture::load_texture;
 
-pub enum TextureSource {
-    Original,
-    Modified,
-    None,
-}
+pub type IndexType = u16;
 
 pub struct Gpu {
     pub program: glium::Program,
     pub object: (
-        Vec<(glium::VertexBuffer<Vertex>, glium::index::IndexBuffer<u32>)>,
+        Vec<(
+            glium::VertexBuffer<Vertex>,
+            glium::index::IndexBuffer<IndexType>,
+        )>,
         usize,
     ),
     pub external_texture: (Vec<glium::texture::SrgbTexture2d>, usize),
-    pub texture_source: TextureSource,
+    pub texture_on: bool,
+    pub color_type: (Vec<ColorType>, usize),
 }
 
 impl Gpu {
@@ -33,7 +33,7 @@ impl Gpu {
             let index_buffer = glium::index::IndexBuffer::new(
                 display,
                 glium::index::PrimitiveType::TrianglesList,
-                &o.triangulation(),
+                &o.triangulate(),
             )?;
             obj_data.push((vertex_buffer, index_buffer));
             // todo!();
@@ -72,11 +72,27 @@ impl Gpu {
             )?,
             object: (obj_data, 0),
             external_texture: (load_texture(display), 0),
-            texture_source: TextureSource::Original,
+            texture_on: false,
+            color_type: (
+                vec![
+                    ColorType::Random,
+                    ColorType::Selection(vec![
+                        Color::new(0.1, 0.1, 0.1, 1.0),
+                        Color::new(0.2, 0.2, 0.2, 1.0),
+                        Color::new(0.3, 0.3, 0.3, 1.0),
+                    ]),
+                ],
+                0,
+            ),
         })
     }
 
-    pub fn get_object(&self) -> &(glium::VertexBuffer<Vertex>, glium::index::IndexBuffer<u32>) {
+    pub fn get_object(
+        &self,
+    ) -> &(
+        glium::VertexBuffer<Vertex>,
+        glium::index::IndexBuffer<IndexType>,
+    ) {
         &self.object.0[self.object.1]
     }
 
@@ -107,4 +123,10 @@ impl Gpu {
             self.external_texture.1 - 1
         };
     }
+
+    // pub fn apply_next_color(&self) {
+    //     self.color_type.1 = (self.color_type.1 + 1) % self.color_type.0.len();
+
+    //     self.color_type.0[self.color_type.1].apply(self.object.0[self.object.1].0);
+    // }
 }
