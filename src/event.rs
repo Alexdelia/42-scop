@@ -50,23 +50,23 @@ impl Env {
             // 	self.gpu.
             // }
             VirtualKeyCode::Y => {
-                self.gpu.prev_texture();
+                self.gpu.texture.prev();
                 EventOut::None
             }
             VirtualKeyCode::U => {
-                self.gpu.next_texture();
+                self.gpu.texture.next();
                 EventOut::None
             }
             VirtualKeyCode::R => {
                 self.setting.rotate = !self.setting.rotate;
                 EventOut::None
             }
-            VirtualKeyCode::Right | VirtualKeyCode::D => {
-                self.gpu.next_object();
+            VirtualKeyCode::Left | VirtualKeyCode::A | VirtualKeyCode::Q => {
+                self.gpu.object.prev();
                 EventOut::None
             }
-            VirtualKeyCode::Left | VirtualKeyCode::A | VirtualKeyCode::Q => {
-                self.gpu.prev_object();
+            VirtualKeyCode::Right | VirtualKeyCode::D => {
+                self.gpu.object.next();
                 EventOut::None
             }
             VirtualKeyCode::Up => {

@@ -21,7 +21,7 @@ impl Env {
 
         let uniform = glium::uniform! {
             matrix: matrix,
-            tex: self.gpu.get_texture(),
+            tex: self.gpu.texture.get(),
             texture_on: self.gpu.texture_on,
         };
 
@@ -35,7 +35,7 @@ impl Env {
         };
         // let params = DrawParameters::default();
 
-        let object = self.gpu.get_object();
+        let object = self.gpu.object.get();
 
         frame
             .draw(&object.0, &object.1, &self.gpu.program, &uniform, &params)

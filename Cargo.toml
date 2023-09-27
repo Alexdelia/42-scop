@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 ansi = { git = "https://github.com/Alexdelia/yahmrslib.git" }
+ivec = { git = "https://github.com/Alexdelia/yahmrslib.git" }
 hmerr = { git = "https://github.com/Alexdelia/yahmrslib.git" }
 spof = { git = "https://github.com/Alexdelia/yahmrslib.git" }
 glium = "0.32.1"
