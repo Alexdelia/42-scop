@@ -1,8 +1,7 @@
-#![allow(unused)] // TODO: remove
-
 mod env;
 mod event;
 mod gpu;
+mod helper;
 mod matrix;
 mod obj;
 mod parse;
@@ -13,7 +12,7 @@ use prelude::*;
 
 pub use obj::{Color, ColorPrecision, Object, Vertex, VertexPrecision};
 
-use matrix::{transformation::RotationAmount, Matrix};
+pub use matrix::{transformation::RotationAmount, Matrix};
 
 use env::Env;
 use event::EventOut;
@@ -22,6 +21,8 @@ use glium::glutin;
 
 fn main() -> Result<()> {
     let object = parse::parse()?;
+
+    helper::help();
 
     event_loop(object)
 }
@@ -33,7 +34,7 @@ pub struct LoopData {
 }
 
 pub fn event_loop(object: Vec<Object>) -> Result<()> {
-    let mut event_loop = glutin::event_loop::EventLoop::new();
+    let event_loop = glutin::event_loop::EventLoop::new();
     let mut env = Env::new(&event_loop, object)?;
     let mut loop_data = LoopData::default();
 
