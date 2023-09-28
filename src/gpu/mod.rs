@@ -26,27 +26,29 @@ impl Gpu {
         let mut obj_data: IVec<(
             IVec<glium::VertexBuffer<Vertex>>,
             glium::index::IndexBuffer<IndexType>,
-        )> = IVec::default();
+        )> = IVec::new();
 
         for o in object {
             dbg!(&o.name);
             let mut v = Vec::new();
-			for color_type in [ColorType::Random, ColorType::Selection(vec![
+            for color_type in [
+                ColorType::Random,
+                ColorType::Selection(vec![
                     Color::new(0.1, 0.1, 0.1, 1.0),
                     Color::new(0.2, 0.2, 0.2, 1.0),
                     Color::new(0.3, 0.3, 0.3, 1.0),
                 ]),
             ] {
-				let mut vertex = o.vertex.clone();
-				color_type.apply(&mut vertex);
-				v.push(glium::VertexBuffer::new(display, &vertex)?);
-			}
+                let mut vertex = o.vertex.clone();
+                color_type.apply(&mut vertex);
+                v.push(glium::VertexBuffer::new(display, &vertex)?);
+            }
             let index_buffer = glium::index::IndexBuffer::new(
                 display,
                 glium::index::PrimitiveType::TrianglesList,
                 &o.triangulate(),
             )?;
-            obj_data.vec.push((v, index_buffer));
+            obj_data.vec.push((v.into(), index_buffer));
             // todo!();
         }
 
@@ -84,7 +86,6 @@ impl Gpu {
             object: obj_data.into(),
             texture: load_texture(display).into(),
             texture_on: false,
-            .into(),
         })
     }
 }

@@ -1,7 +1,7 @@
 mod vertex;
 pub use vertex::{Vertex, VertexPrecision};
 mod color;
-pub use color::{switch::ColorType, Color, ColorPrecision};
+pub use color::{r#type::ColorType, Color, ColorPrecision};
 mod material;
 pub use material::Material;
 mod triangulate;

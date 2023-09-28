@@ -1,4 +1,4 @@
-pub mod switch;
+pub mod r#type;
 
 pub type ColorPrecision = f32;
 

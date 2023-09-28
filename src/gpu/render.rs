@@ -38,7 +38,13 @@ impl Env {
         let object = self.gpu.object.get();
 
         frame
-            .draw(&object.0, &object.1, &self.gpu.program, &uniform, &params)
+            .draw(
+                object.0.get(),
+                &object.1,
+                &self.gpu.program,
+                &uniform,
+                &params,
+            )
             .unwrap();
 
         frame.finish().unwrap();

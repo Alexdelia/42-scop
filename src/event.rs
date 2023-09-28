@@ -33,55 +33,50 @@ impl Env {
             ..
         } = input
         {
-            self.key_simple(key)
+            if key == VirtualKeyCode::Escape {
+                EventOut::ControlFlow(ControlFlow::Exit)
+            } else {
+                self.key_simple(key);
+                EventOut::None
+            }
         } else {
             self.key_complex(input)
         }
     }
 
-    fn key_simple(&mut self, key: VirtualKeyCode) -> EventOut {
+    fn key_simple(&mut self, key: VirtualKeyCode) {
         match key {
-            VirtualKeyCode::Escape => EventOut::ControlFlow(ControlFlow::Exit),
             VirtualKeyCode::T => {
                 self.gpu.texture_on = !self.gpu.texture_on;
-                EventOut::None
             }
-            // VirtualKeyCode::C => {
-            // 	self.gpu.
-            // }
+            VirtualKeyCode::C => {
+                self.gpu.object.get_mut().0.next();
+            }
             VirtualKeyCode::Y => {
                 self.gpu.texture.prev();
-                EventOut::None
             }
             VirtualKeyCode::U => {
                 self.gpu.texture.next();
-                EventOut::None
             }
             VirtualKeyCode::R => {
                 self.setting.rotate = !self.setting.rotate;
-                EventOut::None
             }
             VirtualKeyCode::Left | VirtualKeyCode::A | VirtualKeyCode::Q => {
                 self.gpu.object.prev();
-                EventOut::None
             }
             VirtualKeyCode::Right | VirtualKeyCode::D => {
                 self.gpu.object.next();
-                EventOut::None
             }
             VirtualKeyCode::Up => {
                 self.setting.zoom_amount -= 0.1;
-                EventOut::None
             }
             VirtualKeyCode::Down => {
                 self.setting.zoom_amount += 0.1;
-                EventOut::None
             }
             _ => {
                 eprintln!("no bind for {:?}", key);
-                EventOut::None
             }
-        }
+        };
     }
 
     fn key_complex(&self, input: KeyboardInput) -> EventOut {
