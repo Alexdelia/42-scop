@@ -58,21 +58,21 @@ impl Env {
             VirtualKeyCode::U => {
                 self.gpu.texture.next();
             }
-            VirtualKeyCode::R => {
-                self.setting.rotate = !self.setting.rotate;
-            }
+            // VirtualKeyCode::R => {
+            //     self.setting.rotate = !self.setting.rotate;
+            // }
             VirtualKeyCode::Left | VirtualKeyCode::A | VirtualKeyCode::Q => {
                 self.gpu.object.prev();
             }
             VirtualKeyCode::Right | VirtualKeyCode::D => {
                 self.gpu.object.next();
             }
-            VirtualKeyCode::Up => {
-                self.setting.zoom_amount -= 0.1;
-            }
-            VirtualKeyCode::Down => {
-                self.setting.zoom_amount += 0.1;
-            }
+            // VirtualKeyCode::Up => {
+            //     self.setting.zoom_amount -= 0.1;
+            // }
+            // VirtualKeyCode::Down => {
+            //     self.setting.zoom_amount += 0.1;
+            // }
             _ => {
                 eprintln!("no bind for {:?}", key);
             }
@@ -99,10 +99,10 @@ impl Env {
     fn wheel(&mut self, delta: MouseScrollDelta) -> EventOut {
         match delta {
             MouseScrollDelta::LineDelta(x, y) => {
-                self.setting.zoom_amount -= y as f32;
+                // self.setting.zoom_amount -= y as f32;
             }
             MouseScrollDelta::PixelDelta(position) => {
-                self.setting.zoom_amount -= position.y as f32;
+                // self.setting.zoom_amount -= position.y as f32;
             }
         };
         EventOut::None

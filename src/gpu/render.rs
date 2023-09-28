@@ -1,9 +1,9 @@
-use crate::env::Env;
+use crate::{env::Env, matrix::Matrix, LoopData};
 
 use glium::{DrawParameters, Surface};
 
 impl Env {
-    pub fn render(&self, rotate_angle: f32) {
+    pub fn render(&self, data: &LoopData) {
         let mut frame = self.display.draw();
 
         frame.clear_color_and_depth(
@@ -16,11 +16,12 @@ impl Env {
             1.0,
         );
 
-        let mut matrix = rotate_matrix(rotate_angle);
-        zoom_matrix(&mut matrix, self.setting.zoom_amount);
+        let mut matrix = Matrix::rotation(data.rotation);
+        matrix *= Matrix::translation(self.setting.translation);
 
         let uniform = glium::uniform! {
-            matrix: matrix,
+            matrix: matrix.0,
+            perspective: Matrix::perspective(frame.get_dimensions()).0,
             tex: self.gpu.texture.get(),
             texture_on: self.gpu.texture_on,
         };
@@ -63,5 +64,5 @@ fn rotate_matrix(angle: f32) -> [[f32; 4]; 4] {
 }
 
 fn zoom_matrix(matrix: &mut [[f32; 4]; 4], amount: f32) {
-    matrix[3][3] *= amount;
+    matrix[3][2] += amount;
 }

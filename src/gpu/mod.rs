@@ -29,7 +29,6 @@ impl Gpu {
         )> = IVec::new();
 
         for o in object {
-            dbg!(&o.name);
             let mut v = Vec::new();
             for color_type in [
                 ColorType::Random,
@@ -49,32 +48,7 @@ impl Gpu {
                 &o.triangulate(),
             )?;
             obj_data.vec.push((v.into(), index_buffer));
-            // todo!();
         }
-
-        let shape = vec![
-            Vertex {
-                position: [0.0, 0.5, 0.0, 1.0],
-                color: [1.0, 0.0, 0.0, 1.0],
-                texture: [0.5, 1.0],
-            },
-            Vertex {
-                position: [-0.5, -0.5, 0.0, 1.0],
-                color: [0.0, 1.0, 0.0, 1.0],
-                texture: [0.0, 0.0],
-            },
-            Vertex {
-                position: [0.5, -0.5, 0.0, 1.0],
-                color: [0.0, 0.0, 1.0, 1.0],
-                texture: [1.0, 0.0],
-            },
-        ];
-
-        let vertex_buffer = glium::VertexBuffer::new(display, &shape)?;
-        let index_buffer = glium::index::NoIndices(glium::index::PrimitiveType::TrianglesList);
-
-        // tmp
-        // obj_data.push((vertex_buffer, index_buffer));
 
         Ok(Self {
             program: glium::Program::from_source(

@@ -11,7 +11,6 @@ pub struct Env {
     pub display: glium::Display,
     pub gpu: crate::gpu::Gpu,
     pub setting: Setting,
-    pub object: Vec<Object>,
 }
 
 impl Env {
@@ -48,7 +47,6 @@ impl Env {
             display,
             gpu,
             setting,
-            object,
         })
     }
 }
