@@ -38,7 +38,7 @@ impl Default for Setting {
             icon: Path::new("src/icon.png"),
             fps: None,
             bg_color: Color::new(0.0, 0.0, 0.0, 0.0),
-            speed: 0.01,
+            speed: 0.002,
             translation: TranslationAmount {
                 x: 0.0,
                 y: 0.0,
