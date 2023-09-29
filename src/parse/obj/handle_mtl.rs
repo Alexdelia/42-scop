@@ -5,10 +5,10 @@ use crate::obj::Material;
 use crate::setting::OBJ_PATH;
 
 use ansi::abbrev::{B, BLU, D, Y};
-use spof::{FoundLine, SpofedFile};
+use spof::{SpofedFile};
 
-use std::collections::HashMap;
-use std::path::{Path, PathBuf};
+
+use std::path::{PathBuf};
 
 pub fn get_mtl(f: &SpofedFile<RuleObj>, mtl_path: &[PathBuf]) -> Result<Option<PathBuf>> {
     let mtl = &f[RuleObj::Mtllib].data;

@@ -27,40 +27,14 @@ impl Color {
     }
 }
 
-impl Into<[ColorPrecision; 4]> for Color {
-    fn into(self) -> [ColorPrecision; 4] {
-        [self.r, self.g, self.b, self.a]
+impl From<Color> for [ColorPrecision; 4] {
+    fn from(c: Color) -> Self {
+        [c.r, c.g, c.b, c.a]
     }
 }
 
-impl Into<[ColorPrecision; 3]> for Color {
-    fn into(self) -> [ColorPrecision; 3] {
-        [self.r, self.g, self.b]
-    }
-}
-
-impl
-    Into<(
-        ColorPrecision,
-        ColorPrecision,
-        ColorPrecision,
-        ColorPrecision,
-    )> for Color
-{
-    fn into(
-        self,
-    ) -> (
-        ColorPrecision,
-        ColorPrecision,
-        ColorPrecision,
-        ColorPrecision,
-    ) {
-        (self.r, self.g, self.b, self.a)
-    }
-}
-
-impl Into<(ColorPrecision, ColorPrecision, ColorPrecision)> for Color {
-    fn into(self) -> (ColorPrecision, ColorPrecision, ColorPrecision) {
-        (self.r, self.g, self.b)
+impl From<Color> for [ColorPrecision; 3] {
+    fn from(c: Color) -> Self {
+        [c.r, c.g, c.b]
     }
 }

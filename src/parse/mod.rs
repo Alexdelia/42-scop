@@ -1,7 +1,7 @@
 mod load_dir;
 pub use load_dir::load_dir;
 mod file_data;
-use file_data::FileData;
+
 mod mtl;
 mod obj;
 
@@ -9,10 +9,10 @@ use crate::prelude::*;
 use crate::setting::OBJ_PATH;
 use crate::Object;
 
-use ansi::abbrev::{B, BLU, D, G, M, R, Y};
+use ansi::abbrev::{B, BLU, D, G, M, Y};
 
-use std::fs::File;
-use std::io::{BufRead, BufReader};
+
+
 use std::path::{Path, PathBuf};
 
 pub fn parse() -> Result<Vec<Object>> {

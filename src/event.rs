@@ -52,11 +52,20 @@ impl Env {
             VirtualKeyCode::C => {
                 self.gpu.object.get_mut().0.next();
             }
-            VirtualKeyCode::Y => {
-                self.gpu.texture.prev();
-            }
+            // VirtualKeyCode::Y => {
+            //     self.gpu.texture.prev();
+            // }
             VirtualKeyCode::U => {
                 self.gpu.texture.next();
+            }
+            VirtualKeyCode::X => {
+                self.setting.rotate.x.next();
+            }
+            VirtualKeyCode::Y => {
+                self.setting.rotate.y.next();
+            }
+            VirtualKeyCode::Z => {
+                self.setting.rotate.z.next();
             }
             // VirtualKeyCode::R => {
             //     self.setting.rotate = !self.setting.rotate;

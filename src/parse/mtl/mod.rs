@@ -2,7 +2,7 @@ use crate::prelude::*;
 
 use crate::obj::Material;
 
-use ansi::abbrev::{B, BLU, D, G, N_C};
+use ansi::abbrev::{BLU, G, N_C};
 use spof::{rule, FileDataKey, SpofedFile};
 
 use std::path::Path;

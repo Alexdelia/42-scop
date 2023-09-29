@@ -1,6 +1,6 @@
 use crate::{env::Env, matrix::Matrix, LoopData};
 
-use glium::{DrawParameters, Surface};
+use glium::{Surface};
 
 impl Env {
     pub fn render(&self, data: &LoopData) {

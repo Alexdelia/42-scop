@@ -1,3 +1,5 @@
+#![allow(unused)]
+
 mod env;
 mod event;
 mod gpu;
@@ -47,9 +49,6 @@ pub fn event_loop(object: Vec<Object>) -> Result<()> {
 
         if let EventOut::ControlFlow(cf) = env.event(event) {
             *control_flow = cf;
-            if cf == glutin::event_loop::ControlFlow::Exit {
-                return;
-            }
         }
     });
 }

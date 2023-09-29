@@ -1,16 +1,16 @@
 mod face;
 mod handle_mtl;
-use handle_mtl::{check_usemtl, get_mtl};
+use handle_mtl::{check_usemtl};
 
 use crate::prelude::*;
 
-use super::mtl::parse as mtl_parse;
+
 use crate::obj::{ColorType, EFace, Face};
 use crate::{Object, VertexPrecision};
 
 use ansi::abbrev::{B, BLU, D, M};
-use hmerr::ParseFileError;
-use spof::{rule, FileDataKey, FoundLine, SpofedFile};
+
+use spof::{rule, FileDataKey, SpofedFile};
 
 use rand::Rng;
 
@@ -33,7 +33,7 @@ rule!(
     }
 );
 
-pub fn parse(obj_path: &Path, mtl_path: &[PathBuf]) -> Result<Object> {
+pub fn parse(obj_path: &Path, _mtl_path: &[PathBuf]) -> Result<Object> {
     let f = SpofedFile::new(obj_path, Some(COMMENT), RuleObj::build())?;
 
     // let mtl = if let Some(p) = get_mtl(&f, mtl_path)? {

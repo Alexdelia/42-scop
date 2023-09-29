@@ -1,6 +1,6 @@
 pub mod transformation;
 
-use crate::{Vertex, VertexPrecision};
+use crate::{VertexPrecision};
 
 use std::ops::{Mul, MulAssign};
 

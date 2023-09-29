@@ -1,8 +1,8 @@
-use glium::IndexBuffer;
+
 
 use crate::{gpu::IndexType, VertexPrecision};
 
-use super::{EFace, Object, Vertex};
+use super::{EFace, Object};
 
 impl Object {
     pub fn triangulate(&self) -> Vec<IndexType> {

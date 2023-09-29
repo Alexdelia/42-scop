@@ -9,6 +9,7 @@ mod triangulate;
 // https://en.wikipedia.org/wiki/Wavefront_.obj_file
 // http://web.cse.ohio-state.edu/~shen.94/581/Site/Lab3_files/Labhelp_Obj_parser.htm
 
+#[derive(Default)]
 pub struct Object {
     pub name: String,
     pub group: Option<String>,
@@ -19,21 +20,6 @@ pub struct Object {
     pub face: Vec<Face>,
     pub material: Option<Material>, // usemtl not fully implemented
     pub smooth: bool,               // not implemented
-}
-
-impl Default for Object {
-    fn default() -> Self {
-        Self {
-            name: String::new(),
-            group: None,
-            vertex: Vec::new(),
-            texture: Vec::new(),
-            normal: Vec::new(),
-            face: Vec::new(),
-            material: None,
-            smooth: false,
-        }
-    }
 }
 
 impl Object {

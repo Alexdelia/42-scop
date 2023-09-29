@@ -25,6 +25,16 @@ pub enum RotationType {
     None,
 }
 
+impl RotationType {
+    pub fn next(&mut self) {
+        *self = match self {
+            Self::Clockwise => Self::CounterClockwise,
+            Self::CounterClockwise => Self::None,
+            Self::None => Self::Clockwise,
+        }
+    }
+}
+
 pub struct RotateAxis {
     pub x: RotationType,
     pub y: RotationType,

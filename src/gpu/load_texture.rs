@@ -1,7 +1,7 @@
 use crate::parse::load_dir;
 use crate::setting::TEXTURE_PATH;
 
-use ansi::abbrev::{B, D, M, N_C, R, Y};
+use ansi::abbrev::{B, D, M, N_C, R};
 
 use std::io::{stdout, Write};
 use std::path::{Path, PathBuf};
@@ -13,8 +13,8 @@ enum LoadError {
 
 pub fn load_texture(display: &glium::Display) -> Vec<glium::texture::SrgbTexture2d> {
     let Ok(dir) = load_dir(TEXTURE_PATH) else {
-		return vec![empty_texture(display)];
-	};
+        return vec![empty_texture(display)];
+    };
 
     let texture = filter_texture(dir_to_texture(display, dir));
 
@@ -48,18 +48,18 @@ fn dir_to_texture(
     let mut stdout = stdout();
 
     print!("loading {B}{M}{}{D} texture\t{B}", dir.len());
-    stdout.flush();
+    stdout.flush().expect("failed to flush stdout");
 
     for path in dir {
         match path_to_texture(display, &path) {
             Ok(t) => {
                 print!(".");
-                stdout.flush();
+                stdout.flush().expect("failed to flush stdout");
                 texture.push((path, Ok(t)))
             }
             Err(e) => {
                 print!("{R}x{N_C}");
-                stdout.flush();
+                stdout.flush().expect("failed to flush stdout");
                 texture.push((path, Err(e)))
             }
         }
