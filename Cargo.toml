@@ -4,7 +4,9 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-ansi = { git = "https://github.com/Alexdelia/yahmrslib.git" }
+ansi = { git = "https://github.com/Alexdelia/yahmrslib.git", features = [
+	"forty_two",
+] }
 ivec = { git = "https://github.com/Alexdelia/yahmrslib.git" }
 hmerr = { git = "https://github.com/Alexdelia/yahmrslib.git" }
 spof = { git = "https://github.com/Alexdelia/yahmrslib.git" }
