@@ -49,15 +49,27 @@ impl FromStr for EFace {
             .parse::<usize>()
             .map_err(ParseFaceError::Int)?;
 
-        let texture = indices
-            .next()
-            .map(|s| s.parse::<usize>().map_err(ParseFaceError::Int))
-            .transpose()?;
+        let texture = match indices.next() {
+            Some(s) => {
+                if s.is_empty() {
+                    None
+                } else {
+                    Some(s.parse::<usize>().map_err(ParseFaceError::Int)?)
+                }
+            }
+            None => None,
+        };
 
-        let normal = indices
-            .next()
-            .map(|s| s.parse::<usize>().map_err(ParseFaceError::Int))
-            .transpose()?;
+        let normal = match indices.next() {
+            Some(s) => {
+                if s.is_empty() {
+                    None
+                } else {
+                    Some(s.parse::<usize>().map_err(ParseFaceError::Int)?)
+                }
+            }
+            None => None,
+        };
 
         Ok(Self {
             vertex,
