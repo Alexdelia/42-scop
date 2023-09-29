@@ -2,7 +2,7 @@ mod face;
 mod handle_mtl;
 use handle_mtl::check_usemtl;
 
-use crate::prelude::*;
+use crate::{prelude::*, Vertex};
 
 use crate::obj::{ColorType, EFace, Face};
 use crate::{Object, VertexPrecision};
@@ -54,11 +54,6 @@ pub fn parse(obj_path: &Path, _mtl_path: &[PathBuf]) -> Result<Object> {
     let mut vp = vec![vec![0.0]];
     vp.extend(f.parse::<VertexPrecision>(RuleObj::Vp)?);
 
-    // let v = f.parse::<VertexPrecision>(RuleObj::V)?;
-    // let vn = f.parse::<VertexPrecision>(RuleObj::Vn)?;
-    // let vt = f.parse::<VertexPrecision>(RuleObj::Vt)?;
-    // let vp = f.parse::<VertexPrecision>(RuleObj::Vp)?;
-
     // let face = face::parse(&f)?;
     let face: Vec<Face> = f.parse::<EFace>(RuleObj::F)?;
     let name = f[RuleObj::O].data.first_token().map_or_else(
@@ -67,23 +62,18 @@ pub fn parse(obj_path: &Path, _mtl_path: &[PathBuf]) -> Result<Object> {
     );
     let group = f[RuleObj::G].data.first_token().map(|t| t.to_string());
 
-    // TMP
-    let mut rng = rand::thread_rng();
-    let mut v = v
+    let v = v
         .into_iter()
-        .map(|vertices| crate::Vertex {
+        .map(|vertices| Vertex {
             position: [
                 vertices[0],
                 vertices[1],
                 vertices[2],
                 *vertices.get(3).unwrap_or(&1.0),
             ],
-            texture: [rng.gen(), rng.gen()],
             ..Default::default()
         })
         .collect();
-
-    ColorType::Random.apply(&mut v);
 
     Ok(Object {
         name,
