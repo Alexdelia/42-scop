@@ -16,7 +16,8 @@ impl Env {
             1.0,
         );
 
-        let mut matrix = Matrix::rotation(data.rotation);
+        let mut matrix = self.gpu.object.get().2;
+        matrix *= Matrix::rotation(data.rotation);
         matrix *= Matrix::translation(self.setting.translation);
 
         let uniform = glium::uniform! {

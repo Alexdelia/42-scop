@@ -4,6 +4,8 @@ mod color;
 pub use color::{r#type::ColorType, Color, ColorPrecision};
 mod material;
 pub use material::Material;
+mod bound;
+pub use bound::Bound;
 mod triangulate;
 
 // https://en.wikipedia.org/wiki/Wavefront_.obj_file

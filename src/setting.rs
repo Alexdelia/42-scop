@@ -52,7 +52,7 @@ impl Default for Setting {
             translation: TranslationAmount {
                 x: 0.0,
                 y: 0.0,
-                z: 6.0,
+                z: 2.5,
             },
             rotate: RotateAxis {
                 x: RotationType::None,

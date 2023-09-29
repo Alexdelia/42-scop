@@ -1,5 +1,5 @@
 use crate::env::Env;
-use crate::{Color, ColorPrecision};
+use crate::{Color, ColorPrecision, VertexPrecision};
 
 use glium::glutin::{
     dpi::PhysicalPosition,

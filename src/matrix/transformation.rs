@@ -26,6 +26,15 @@ impl Matrix {
         ])
     }
 
+    pub fn scale(s: TranslationAmount) -> Self {
+        Self([
+            [s.x, 0.0, 0.0, 0.0],
+            [0.0, s.y, 0.0, 0.0],
+            [0.0, 0.0, s.z, 0.0],
+            [0.0, 0.0, 0.0, 1.0],
+        ])
+    }
+
     /// rotate matrix
     ///
     /// matrix x rotation:

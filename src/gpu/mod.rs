@@ -3,7 +3,10 @@ mod render;
 
 use crate::prelude::*;
 
-use crate::{obj::ColorType, Color, Object, Vertex};
+use crate::{
+    obj::{Bound, ColorType},
+    Color, Matrix, Object, Vertex,
+};
 
 use load_texture::load_texture;
 
@@ -16,6 +19,7 @@ pub struct Gpu {
     pub object: IVec<(
         IVec<glium::VertexBuffer<Vertex>>,
         glium::index::IndexBuffer<IndexType>,
+        Matrix,
     )>,
     pub texture: IVec<glium::texture::SrgbTexture2d>,
     pub texture_on: bool,
@@ -23,12 +27,11 @@ pub struct Gpu {
 
 impl Gpu {
     pub fn new(display: &glium::Display, object: &[Object]) -> Result<Self> {
-        let mut obj_data: IVec<(
-            IVec<glium::VertexBuffer<Vertex>>,
-            glium::index::IndexBuffer<IndexType>,
-        )> = IVec::new();
+        let mut obj_data = IVec::new();
 
         for o in object {
+            let bound = Bound::new(&o.vertex);
+
             let mut v = Vec::new();
             for color_type in [
                 ColorType::Random,
@@ -42,7 +45,7 @@ impl Gpu {
                     Color::new(0.0, 0.0, 1.0, 1.0),
                 )),
                 ColorType::YGradient((
-                    Color::new(0.0, 1.0, 0.33, -1.0),
+                    Color::new(0.0, 1.0, 0.33, 0.0),
                     Color::new(0.0, 1.0, 0.0, 1.0),
                 )),
             ] {
@@ -55,7 +58,8 @@ impl Gpu {
                 glium::index::PrimitiveType::TrianglesList,
                 &o.triangulate(),
             )?;
-            obj_data.vec.push((v.into(), index_buffer));
+
+            obj_data.vec.push((v.into(), index_buffer, bound.matrix()));
         }
 
         Ok(Self {
