@@ -41,6 +41,10 @@ impl Gpu {
                     Color::new(1.0, 0.0, 0.0, 1.0),
                     Color::new(0.0, 0.0, 1.0, 1.0),
                 )),
+                ColorType::YGradient((
+                    Color::new(0.0, 1.0, 0.33, -1.0),
+                    Color::new(0.0, 1.0, 0.0, 1.0),
+                )),
             ] {
                 let mut vertex = o.vertex.clone();
                 color_type.apply(&mut vertex);

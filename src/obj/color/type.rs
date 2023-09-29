@@ -1,7 +1,7 @@
 use rand::Rng;
 
 use super::Color;
-use crate::Vertex;
+use crate::{Vertex, VertexPrecision};
 
 pub enum ColorType {
     Random,
@@ -43,21 +43,29 @@ impl ColorType {
         }
     }
 
-    /// gradient from color start at y = 1.0 to color end at y = -1.0
     fn y_gradient<'a, I>(vertex: I, start: &Color, end: &Color)
     where
         I: IntoIterator<Item = &'a mut Vertex>,
     {
-        for v in vertex {
+        let mut min = VertexPrecision::MAX;
+        let mut max = VertexPrecision::MIN;
+
+        let v = vertex.into_iter().collect::<Vec<_>>();
+
+        let (min, max) = v.iter().fold((min, max), |(min, max), v| {
             let [_, y, ..] = v.position;
-            let y = y / 2.0 + 0.5;
 
-            let r = start.r * y + end.r * (1.0 - y);
-            let g = start.g * y + end.g * (1.0 - y);
-            let b = start.b * y + end.b * (1.0 - y);
-            let a = start.a * y + end.a * (1.0 - y);
+            (min.min(y), max.max(y))
+        });
 
-            v.color = [r, g, b, a];
+        for v in v.into_iter() {
+            let [_, y, ..] = v.position;
+            let t = (y - min) / (max - min);
+
+            v.color[0] = start.r + (end.r - start.r) * t;
+            v.color[1] = start.g + (end.g - start.g) * t;
+            v.color[2] = start.b + (end.b - start.b) * t;
+            v.color[3] = start.a + (end.a - start.a) * t;
         }
     }
 }

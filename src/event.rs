@@ -67,9 +67,6 @@ impl Env {
             VirtualKeyCode::Z => {
                 self.setting.rotate.z.next();
             }
-            // VirtualKeyCode::R => {
-            //     self.setting.rotate = !self.setting.rotate;
-            // }
             VirtualKeyCode::Left | VirtualKeyCode::A | VirtualKeyCode::Q => {
                 self.gpu.object.prev();
             }
@@ -107,11 +104,19 @@ impl Env {
 
     fn wheel(&mut self, delta: MouseScrollDelta) -> EventOut {
         match delta {
-            MouseScrollDelta::LineDelta(x, y) => {
-                // self.setting.zoom_amount -= y as f32;
+            MouseScrollDelta::LineDelta(_x, y) => {
+                if y > 0.0 {
+                    self.setting.translation.z /= 1.2;
+                } else {
+                    self.setting.translation.z *= 1.2;
+                }
             }
             MouseScrollDelta::PixelDelta(position) => {
-                // self.setting.zoom_amount -= position.y as f32;
+                if position.y > 0.0 {
+                    self.setting.translation.z /= 1.2;
+                } else {
+                    self.setting.translation.z *= 1.2;
+                }
             }
         };
         EventOut::None
