@@ -1,5 +1,3 @@
-
-
 use crate::{gpu::IndexType, VertexPrecision};
 
 use super::{EFace, Object};
@@ -68,10 +66,9 @@ fn is_ear(queue: &[IndexType], point: &[Point], a: IndexType, b: IndexType, c: I
 
     for i in queue {
         let i = *i as usize;
-        if i != a && i != b && i != c {
-            if is_in_triangle(&point[i], &point[a], &point[b], &point[c]) {
-                return false;
-            }
+        if i != a && i != b && i != c && is_in_triangle(&point[i], &point[a], &point[b], &point[c])
+        {
+            return false;
         }
     }
 

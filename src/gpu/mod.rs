@@ -61,7 +61,7 @@ impl Gpu {
                 include_str!("main.frag"),
                 None,
             )?,
-            object: obj_data.into(),
+            object: obj_data,
             texture: load_texture(display).into(),
             texture_on: false,
         })

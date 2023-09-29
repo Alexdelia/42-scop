@@ -25,7 +25,7 @@ impl Env {
                 .with_transparent(true)
                 .with_window_icon(load_icon(setting.icon)),
             glutin::ContextBuilder::new(),
-            &event_loop,
+            event_loop,
         )?;
         {
             use glium::Surface;

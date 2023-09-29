@@ -16,7 +16,7 @@ impl Env {
     pub fn event(&mut self, event: Event<()>) -> EventOut {
         match event {
             Event::WindowEvent { event, .. } => match event {
-                WindowEvent::CloseRequested => return EventOut::ControlFlow(ControlFlow::Exit),
+                WindowEvent::CloseRequested => EventOut::ControlFlow(ControlFlow::Exit),
                 WindowEvent::KeyboardInput { input, .. } => self.key(input),
                 WindowEvent::CursorMoved { position, .. } => self.cursor(&position),
                 WindowEvent::MouseWheel { delta, .. } => self.wheel(delta),

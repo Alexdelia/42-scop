@@ -16,7 +16,7 @@ impl ColorType {
     {
         match self {
             ColorType::Random => Self::random(vertex),
-            ColorType::Selection(colors) => Self::selection(vertex, &colors),
+            ColorType::Selection(colors) => Self::selection(vertex, colors),
             ColorType::YGradient((start, end)) => Self::y_gradient(vertex, start, end),
         }
     }
@@ -38,15 +38,12 @@ impl ColorType {
     where
         I: IntoIterator<Item = &'a mut Vertex>,
     {
-        let mut i = 0;
-
-        for v in vertex {
+        for (i, v) in vertex.into_iter().enumerate() {
             v.color = colors[i % colors.len()].clone().into();
-            i += 1;
         }
     }
 
-    /// gradient from color start at x = 1.0 to color end at x = -1.0
+    /// gradient from color start at y = 1.0 to color end at y = -1.0
     fn y_gradient<'a, I>(vertex: I, start: &Color, end: &Color)
     where
         I: IntoIterator<Item = &'a mut Vertex>,
