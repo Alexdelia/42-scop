@@ -9,6 +9,12 @@ pub struct Vertex {
 
 glium::implement_vertex!(Vertex, position, color, texture);
 
+pub struct Point {
+    pub x: VertexPrecision,
+    pub y: VertexPrecision,
+    pub z: VertexPrecision,
+}
+
 impl Default for Vertex {
     fn default() -> Self {
         Self {

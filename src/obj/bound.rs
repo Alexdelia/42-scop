@@ -1,39 +1,52 @@
 use crate::{matrix::transformation::TranslationAmount, Matrix, Vertex, VertexPrecision};
 
+use super::Point;
+
 pub struct Bound {
-    pub min: [VertexPrecision; 3],
-    pub max: [VertexPrecision; 3],
+    pub min: Point,
+    pub max: Point,
 }
 
 impl Bound {
-    pub fn new(vertex: &[Vertex]) -> Self {
+    pub fn new<'a, I>(vertex: I) -> Self
+    where
+        I: IntoIterator<Item = &'a Vertex>,
+    {
         let mut bound = Self {
-            min: [f32::MAX, f32::MAX, f32::MAX],
-            max: [f32::MIN, f32::MIN, f32::MIN],
+            min: Point {
+                x: f32::MAX,
+                y: f32::MAX,
+                z: f32::MAX,
+            },
+            max: Point {
+                x: f32::MIN,
+                y: f32::MIN,
+                z: f32::MIN,
+            },
         };
 
         for v in vertex {
-            bound.min[0] = bound.min[0].min(v.x());
-            bound.min[1] = bound.min[1].min(v.y());
-            bound.min[2] = bound.min[2].min(v.z());
-            bound.max[0] = bound.max[0].max(v.x());
-            bound.max[1] = bound.max[1].max(v.y());
-            bound.max[2] = bound.max[2].max(v.z());
+            bound.min.x = bound.min.x.min(v.x());
+            bound.min.y = bound.min.y.min(v.y());
+            bound.min.z = bound.min.z.min(v.z());
+            bound.max.x = bound.max.x.max(v.x());
+            bound.max.y = bound.max.y.max(v.y());
+            bound.max.z = bound.max.z.max(v.z());
         }
         bound
     }
 
     pub fn matrix(self) -> Matrix {
         let matrix = Matrix::translation(TranslationAmount {
-            x: -(self.min[0] + self.max[0]) / 2.0,
-            y: -(self.min[1] + self.max[1]) / 2.0,
-            z: -(self.min[2] + self.max[2]) / 2.0,
+            z: -(self.min.x + self.max.x) / 2.0,
+            y: -(self.min.y + self.max.y) / 2.0,
+            x: -(self.min.z + self.max.z) / 2.0,
         });
 
         let scale = 2.0
-            / (self.max[0] - self.min[0])
-                .max(self.max[1] - self.min[1])
-                .max(self.max[2] - self.min[2]);
+            / (self.max.x - self.min.x)
+                .max(self.max.y - self.min.y)
+                .max(self.max.z - self.min.z);
 
         matrix
             * Matrix::scale(TranslationAmount {

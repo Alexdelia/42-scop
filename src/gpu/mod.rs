@@ -4,7 +4,7 @@ mod render;
 use crate::prelude::*;
 
 use crate::{
-    obj::{Bound, ColorType},
+    obj::{Bound, ColorType, TextureType},
     Color, Matrix, Object, Vertex,
 };
 
@@ -33,7 +33,7 @@ impl Gpu {
             let bound = Bound::new(&o.vertex);
 
             let mut v = Vec::new();
-            for color_type in [
+            for (i, color_type) in [
                 ColorType::Random,
                 ColorType::Selection(vec![
                     Color::new(0.1, 0.1, 0.1, 1.0),
@@ -48,9 +48,17 @@ impl Gpu {
                     Color::new(0.0, 1.0, 0.33, 0.0),
                     Color::new(0.0, 1.0, 0.0, 1.0),
                 )),
-            ] {
+            ]
+            .iter()
+            .enumerate()
+            {
                 let mut vertex = o.vertex.clone();
                 color_type.apply(&mut vertex);
+                if i % 2 {
+                    TextureType::Global.apply(&mut vertex);
+                } else {
+                    TextureType::Local.apply(&mut vertex);
+                }
                 v.push(glium::VertexBuffer::new(display, &vertex)?);
             }
             let index_buffer = glium::index::IndexBuffer::new(

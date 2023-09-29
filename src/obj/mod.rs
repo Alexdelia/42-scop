@@ -1,7 +1,9 @@
 mod vertex;
-pub use vertex::{Vertex, VertexPrecision};
+pub use vertex::{Point, Vertex, VertexPrecision};
 mod color;
 pub use color::{r#type::ColorType, Color, ColorPrecision};
+mod texture;
+pub use texture::TextureType;
 mod material;
 pub use material::Material;
 mod bound;
