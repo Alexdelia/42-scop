@@ -11,8 +11,6 @@ use crate::Object;
 
 use ansi::abbrev::{B, BLU, D, G, M, Y};
 
-
-
 use std::path::{Path, PathBuf};
 
 pub fn parse() -> Result<Vec<Object>> {

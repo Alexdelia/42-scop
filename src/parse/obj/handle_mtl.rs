@@ -5,10 +5,9 @@ use crate::obj::Material;
 use crate::setting::OBJ_PATH;
 
 use ansi::abbrev::{B, BLU, D, Y};
-use spof::{SpofedFile};
+use spof::SpofedFile;
 
-
-use std::path::{PathBuf};
+use std::path::PathBuf;
 
 pub fn get_mtl(f: &SpofedFile<RuleObj>, mtl_path: &[PathBuf]) -> Result<Option<PathBuf>> {
     let mtl = &f[RuleObj::Mtllib].data;
@@ -34,8 +33,8 @@ pub fn get_mtl(f: &SpofedFile<RuleObj>, mtl_path: &[PathBuf]) -> Result<Option<P
 
 pub fn check_usemtl(f: &SpofedFile<RuleObj>, mtl: &Option<Material>) -> Result<bool> {
     let Some(mtl) = mtl else {
-		return Ok(false);
-	};
+        return Ok(false);
+    };
 
     let fl = &f[RuleObj::Usemtl].data;
     if fl.is_empty() {

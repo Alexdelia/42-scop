@@ -1,9 +1,8 @@
 mod face;
 mod handle_mtl;
-use handle_mtl::{check_usemtl};
+use handle_mtl::check_usemtl;
 
 use crate::prelude::*;
-
 
 use crate::obj::{ColorType, EFace, Face};
 use crate::{Object, VertexPrecision};

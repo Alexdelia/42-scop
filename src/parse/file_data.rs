@@ -2,7 +2,7 @@ use crate::prelude::*;
 
 use std::fs::File;
 use std::io::{BufRead, BufReader};
-use std::path::{Path};
+use std::path::Path;
 
 pub struct FileData {
     pub name: String,

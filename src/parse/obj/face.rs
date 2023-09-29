@@ -1,10 +1,8 @@
 use crate::prelude::*;
 
-
-use crate::obj::{EFace};
+use crate::obj::EFace;
 
 use ansi::abbrev::{B, D, M, N_C, R, Y};
-
 
 use std::num::ParseIntError;
 use std::str::FromStr;
