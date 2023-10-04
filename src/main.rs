@@ -25,9 +25,6 @@ fn main() -> Result<()> {
     #[cfg(not(debug_assertions))]
     helper::header();
 
-    helper::help();
-    panic!("help test");
-
     let object = parse::parse()?;
 
     event_loop(object)
