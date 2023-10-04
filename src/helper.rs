@@ -80,7 +80,7 @@ pub fn help() {
 	{texture_prev}
 	{texture_next}
 	{texture_change}
-	",
+",
         quit = control(&format!("{I}{RED}"), &["esc"], "quit"),
         pause = control(&format!("{I}{Y}"), &["space"], "pause"),
         fps_inc = control(BLU, &["↑"], "increase fps"),

@@ -112,9 +112,7 @@ impl Env {
         EventOut::None
     }
 
-    // will handle better and more events later
     fn cursor(&mut self, position: &PhysicalPosition<f64>) -> EventOut {
-        // println!("CursorMoved:\n\tposition:\t{:?}", position);
         let (w, h) = self.display.get_framebuffer_dimensions();
         self.setting.bg_color = Color {
             r: position.x as ColorPrecision / w as ColorPrecision,
@@ -122,6 +120,7 @@ impl Env {
             b: 0.0,
             a: 0.5,
         };
+        // should actually have a hue with the angle of the cursor compared to the center of the screen
         EventOut::None
     }
 
