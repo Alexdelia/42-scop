@@ -46,6 +46,38 @@ impl Env {
 
     fn key_simple(&mut self, key: VirtualKeyCode) {
         match key {
+            // flow
+
+            // rotation
+            VirtualKeyCode::X => {
+                self.setting.rotate.x.next();
+            }
+            VirtualKeyCode::Y => {
+                self.setting.rotate.y.next();
+            }
+            VirtualKeyCode::Z => {
+                self.setting.rotate.z.next();
+            }
+            // translation
+            VirtualKeyCode::A => {
+                self.setting.translation.x -= 0.1;
+            }
+            VirtualKeyCode::D => {
+                self.setting.translation.x += 0.1;
+            }
+            VirtualKeyCode::W => {
+                self.setting.translation.y += 0.1;
+            }
+            VirtualKeyCode::S => {
+                self.setting.translation.y -= 0.1;
+            }
+            VirtualKeyCode::E => {
+                self.setting.translation.z += 0.1;
+            }
+            VirtualKeyCode::Q => {
+                self.setting.translation.z -= 0.1;
+            }
+            // speed
             VirtualKeyCode::T => {
                 self.gpu.texture_on = !self.gpu.texture_on;
             }
@@ -57,15 +89,6 @@ impl Env {
             // }
             VirtualKeyCode::U => {
                 self.gpu.texture.next();
-            }
-            VirtualKeyCode::X => {
-                self.setting.rotate.x.next();
-            }
-            VirtualKeyCode::Y => {
-                self.setting.rotate.y.next();
-            }
-            VirtualKeyCode::Z => {
-                self.setting.rotate.z.next();
             }
             VirtualKeyCode::Left | VirtualKeyCode::A | VirtualKeyCode::Q => {
                 self.gpu.object.prev();

@@ -46,7 +46,8 @@ impl Default for Setting {
         Self {
             title: "scop",
             icon: Path::new("src/icon.png"),
-            fps: None,
+            // fps: None,
+            fps: Some(60),
             bg_color: Color::new(0.0, 0.0, 0.0, 0.0),
             speed: 0.002,
             translation: TranslationAmount {

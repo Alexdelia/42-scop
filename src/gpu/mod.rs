@@ -54,10 +54,10 @@ impl Gpu {
             {
                 let mut vertex = o.vertex.clone();
                 color_type.apply(&mut vertex);
-                if i % 2 {
-                    TextureType::Global.apply(&mut vertex);
+                if i % 2 == 0 {
+                    TextureType::Global.apply(&mut vertex, &o.face);
                 } else {
-                    TextureType::Local.apply(&mut vertex);
+                    TextureType::Local.apply(&mut vertex, &o.face);
                 }
                 v.push(glium::VertexBuffer::new(display, &vertex)?);
             }
