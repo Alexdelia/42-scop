@@ -22,9 +22,13 @@ use event::EventOut;
 use glium::glutin;
 
 fn main() -> Result<()> {
-    let object = parse::parse()?;
+    #[cfg(not(debug_assertions))]
+    helper::header();
 
     helper::help();
+    panic!("help test");
+
+    let object = parse::parse()?;
 
     event_loop(object)
 }
@@ -38,6 +42,9 @@ pub struct LoopData {
 pub fn event_loop(object: Vec<Object>) -> Result<()> {
     let event_loop = glutin::event_loop::EventLoop::new();
     let mut env = Env::new(&event_loop, object)?;
+
+    helper::help();
+
     let mut loop_data = LoopData::default();
 
     event_loop.run(move |event, _, control_flow| {
