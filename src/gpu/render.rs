@@ -1,4 +1,8 @@
-use crate::{env::Env, matrix::Matrix, LoopData};
+use crate::{
+    env::Env,
+    matrix::{transformation::TranslationAmount, Matrix},
+    LoopData,
+};
 
 use glium::Surface;
 

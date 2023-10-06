@@ -48,6 +48,7 @@ pub fn help() {
 {B}{G}flow{N_C}:
 	{quit}
 	{pause}
+	{reverse}
 	{fps_inc}
 	{fps_dec}
 
@@ -83,11 +84,12 @@ pub fn help() {
 ",
         quit = control(&format!("{I}{RED}"), &["esc"], "quit"),
         pause = control(&format!("{I}{Y}"), &["space"], "pause"),
+        reverse = control(&format!("{I}{M}"), &["R"], "reverse"),
         fps_inc = control(BLU, &["↑"], "increase fps"),
         fps_dec = control(BLU, &["↓"], "decrease fps"),
         obj_prev = control(OC, &["←"], "previous object"),
         obj_next = control(OC, &["→"], "next object"),
-        speed_inc = control(Y, &["+"], "increase speed"),
+        speed_inc = control(Y, &["+", "="], "increase speed"),
         speed_dec = control(Y, &["-"], "decrease speed"),
         move_left = control(XC, &["A", "Q"], "move left"),
         move_right = control(XC, &["D"], "move right"),

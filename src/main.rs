@@ -42,10 +42,13 @@ pub fn event_loop(object: Vec<Object>) -> Result<()> {
 
     helper::help();
 
+    println!();
+    env.setting.print_fps();
+
     let mut loop_data = LoopData::default();
 
     event_loop.run(move |event, _, control_flow| {
-        *control_flow = env.setting.fps();
+        *control_flow = env.setting.control_flow();
 
         loop_data.update(&env);
 
@@ -59,7 +62,7 @@ pub fn event_loop(object: Vec<Object>) -> Result<()> {
 
 impl LoopData {
     fn update(&mut self, env: &Env) {
-        self.t = (self.t + env.setting.speed) % 1.0;
+        self.t = (self.t + env.setting.speed.get()) % 1.0;
 
         env.setting.rotation(&mut self.rotation);
     }

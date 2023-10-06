@@ -3,7 +3,9 @@ use crate::{Color, ColorPrecision, VertexPrecision};
 
 use glium::glutin::{
     dpi::PhysicalPosition,
-    event::{ElementState, Event, KeyboardInput, MouseScrollDelta, VirtualKeyCode, WindowEvent},
+    event::{
+        ElementState, Event, KeyboardInput, MouseScrollDelta, VirtualKeyCode as VKC, WindowEvent,
+    },
     event_loop::ControlFlow,
 };
 
@@ -33,7 +35,7 @@ impl Env {
             ..
         } = input
         {
-            if key == VirtualKeyCode::Escape {
+            if key == VKC::Escape {
                 EventOut::ControlFlow(ControlFlow::Exit)
             } else {
                 self.key_simple(key);
@@ -44,66 +46,59 @@ impl Env {
         }
     }
 
-    fn key_simple(&mut self, key: VirtualKeyCode) {
+    fn key_simple(&mut self, key: VKC) {
         match key {
             // flow
-
-            // rotation
-            VirtualKeyCode::X => {
-                self.setting.rotate.x.next();
+            VKC::Space => self.setting.speed.pause(),
+            VKC::R => self.setting.speed.revert(),
+            VKC::Up => {
+                self.setting.fps.next();
+                self.setting.print_fps();
             }
-            VirtualKeyCode::Y => {
-                self.setting.rotate.y.next();
+            VKC::Down => {
+                self.setting.fps.prev();
+                self.setting.print_fps();
             }
-            VirtualKeyCode::Z => {
-                self.setting.rotate.z.next();
-            }
-            // translation
-            VirtualKeyCode::A => {
-                self.setting.translation.x -= 0.1;
-            }
-            VirtualKeyCode::D => {
-                self.setting.translation.x += 0.1;
-            }
-            VirtualKeyCode::W => {
-                self.setting.translation.y += 0.1;
-            }
-            VirtualKeyCode::S => {
-                self.setting.translation.y -= 0.1;
-            }
-            VirtualKeyCode::E => {
-                self.setting.translation.z += 0.1;
-            }
-            VirtualKeyCode::Q => {
-                self.setting.translation.z -= 0.1;
-            }
-            // speed
-            VirtualKeyCode::T => {
-                self.gpu.texture_on = !self.gpu.texture_on;
-            }
-            VirtualKeyCode::C => {
-                self.gpu.object.get_mut().0.next();
-            }
-            // VirtualKeyCode::Y => {
-            //     self.gpu.texture.prev();
-            // }
-            VirtualKeyCode::U => {
-                self.gpu.texture.next();
-            }
-            VirtualKeyCode::Left | VirtualKeyCode::A | VirtualKeyCode::Q => {
+            // object
+            VKC::Left => {
                 self.gpu.object.prev();
             }
-            VirtualKeyCode::Right | VirtualKeyCode::D => {
+            VKC::Right => {
                 self.gpu.object.next();
             }
-            // VirtualKeyCode::Up => {
-            //     self.setting.zoom_amount -= 0.1;
-            // }
-            // VirtualKeyCode::Down => {
-            //     self.setting.zoom_amount += 0.1;
-            // }
+            // speed
+            VKC::Plus | VKC::Equals => self.setting.speed.inc(),
+            VKC::Minus => self.setting.speed.dec(),
+            // translation
+            VKC::A | VKC::Q => self.setting.translation.x -= 0.1,
+            VKC::D => self.setting.translation.x += 0.1,
+            VKC::W | VKC::Z => self.setting.translation.y += 0.1,
+            VKC::S => self.setting.translation.y -= 0.1,
+            // rotation
+            VKC::X => {
+                self.setting.rotate.x.next();
+            }
+            VKC::Y => {
+                self.setting.rotate.y.next();
+            }
+            VKC::Z => {
+                self.setting.rotate.z.next();
+            }
+            // color
+            VKC::C => {
+                self.gpu.object.get_mut().0.next();
+            }
+            // texture
+            VKC::T => self.gpu.texture_on = !self.gpu.texture_on,
+            VKC::Key5 | VKC::Numpad5 => {
+                self.gpu.texture.prev();
+            }
+            VKC::Key6 | VKC::Numpad6 => {
+                self.gpu.texture.next();
+            }
             _ => {
-                eprintln!("no bind for {:?}", key);
+                #[cfg(debug_assertions)]
+                eprintln!("no bind for {key:?}");
             }
         };
     }
@@ -114,13 +109,17 @@ impl Env {
 
     fn cursor(&mut self, position: &PhysicalPosition<f64>) -> EventOut {
         let (w, h) = self.display.get_framebuffer_dimensions();
-        self.setting.bg_color = Color {
-            r: position.x as ColorPrecision / w as ColorPrecision,
-            g: position.y as ColorPrecision / h as ColorPrecision,
-            b: 0.0,
-            a: 0.5,
-        };
-        // should actually have a hue with the angle of the cursor compared to the center of the screen
+        let angle = (position.x - w as f64 / 2.0).atan2(position.y - h as f64 / 2.0);
+        let hue = angle / std::f64::consts::PI / 2.0 + 0.5;
+        let distance =
+            ((position.x - w as f64 / 2.0).powi(2) + (position.y - h as f64 / 2.0).powi(2)).sqrt()
+                / (w as f64 / 2.0);
+        self.setting.bg_color = Color::hsva(
+            hue as ColorPrecision,
+            1.0 - distance as ColorPrecision,
+            (0.25 + (1.0 - distance) / 2.0) as ColorPrecision,
+            0.5,
+        );
         EventOut::None
     }
 
