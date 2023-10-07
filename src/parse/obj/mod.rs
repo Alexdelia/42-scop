@@ -53,7 +53,6 @@ pub fn parse(obj_path: &Path, mtl_path: &[PathBuf]) -> Result<Object> {
     let mut vp = vec![vec![0.0]];
     vp.extend(f.parse::<VertexPrecision>(RuleObj::Vp)?);
 
-    // let face = face::parse(&f)?;
     let face: Vec<Face> = f.parse::<EFace>(RuleObj::F)?;
     let name = f[RuleObj::O].data.first_token().map_or_else(
         || obj_path.file_stem().unwrap().to_str().unwrap().to_string(),

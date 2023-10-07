@@ -105,6 +105,4 @@ pub fn help() {
         texture_next = control(&format!("{BG_BLACK}{G}"), &["6"], "next texture"),
         texture_change = control(&format!("{BG_BLACK}{G}"), &["C"], "change texture pattern"),
     );
-
-    // fps
 }

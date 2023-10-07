@@ -35,7 +35,6 @@ impl Env {
             },
             ..Default::default()
         };
-        // let params = DrawParameters::default();
 
         let object = self.gpu.object.get();
 
