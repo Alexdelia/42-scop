@@ -31,8 +31,7 @@ impl Object {
     pub fn used_vertex(&self) -> Vec<&Vertex> {
         self.face
             .iter()
-            .map(|f| f.iter().map(|ef| &self.vertex[ef.vertex]))
-            .flatten()
+            .flat_map(|f| f.iter().map(|ef| &self.vertex[ef.vertex]))
             .collect()
     }
 }
