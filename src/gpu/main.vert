@@ -3,6 +3,7 @@
 in vec4 position;
 in vec4 color;
 in vec2 texture;
+
 out vec4 v_color;
 out vec2 v_texture;
 
