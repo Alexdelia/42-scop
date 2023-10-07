@@ -57,7 +57,7 @@ impl Gpu {
                 if i % 2 == 0 {
                     TextureType::Global.apply(&mut vertex, &o.face);
                 } else {
-                    TextureType::Local.apply(&mut vertex, &o.face);
+                    TextureType::Unit.apply(&mut vertex, &o.face);
                 }
                 v.push(glium::VertexBuffer::new(display, &vertex)?);
             }

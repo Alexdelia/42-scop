@@ -3,7 +3,7 @@ use crate::Vertex;
 use super::{Bound, Face};
 
 pub enum TextureType {
-    Local,
+    Unit,
     Global,
 }
 
@@ -14,12 +14,12 @@ impl TextureType {
         F: IntoIterator<Item = &'a Face>,
     {
         match self {
-            TextureType::Local => Self::local(vertex, face),
+            TextureType::Unit => Self::unit(vertex, face),
             TextureType::Global => Self::global(vertex),
         }
     }
 
-    fn local<'a, V, F>(vertex: V, face: F)
+    fn unit<'a, V, F>(vertex: V, face: F)
     where
         V: IntoIterator<Item = &'a mut Vertex>,
         F: IntoIterator<Item = &'a Face>,
@@ -37,10 +37,8 @@ impl TextureType {
             for v in vertex.iter_mut() {
                 let [x, y, z, ..] = v.position;
 
-                // most top left vertex has texture = (0, 0)
-                // most bottom right vertex has texture = (1, 1)
-                v.texture[0] = (x - bound.min.x) / (bound.max.x - bound.min.x);
-                v.texture[1] = (y - bound.min.y) / (bound.max.y - bound.min.y);
+                v.texture[0] = (x + z) / 2.0;
+                v.texture[1] = y;
             }
         }
     }
@@ -53,10 +51,17 @@ impl TextureType {
 
         let bound = Bound::new(&vertex.iter().map(|v| **v).collect::<Vec<_>>());
 
+        let front_side: bool = bound.max.x - bound.min.x > bound.max.z - bound.min.z;
+
         for v in vertex.into_iter() {
             let [x, y, z, ..] = v.position;
 
-            v.texture[0] = (x - bound.min.x) / (bound.max.x - bound.min.x);
+            if front_side {
+                v.texture[0] = (x - bound.min.x) / (bound.max.x - bound.min.x);
+            } else {
+                v.texture[0] = (z - bound.min.z) / (bound.max.z - bound.min.z);
+            }
+
             v.texture[1] = (y - bound.min.y) / (bound.max.y - bound.min.y);
         }
     }
