@@ -19,7 +19,8 @@ rule! (
         Ns => "Ns", "specular_exponent", Fixed, Once, "the specular exponent, 0.0-1000.0",
         D => "d", "dissolve", Fixed, Optional, "the dissolve, 0.0-1.0",
         Tr => "Tr", "dissolve", Fixed, Optional, "the dissolve, 0.0-1.0",
-        // Ni => "Ni", "optical_density", Fixed, Once, "the optical density, 1.0-10.0",
+        Tf => "Tf", "R G B", Fixed, Optional, "the transmission filter, 0.0-1.0",
+        Ni => "Ni", "optical_density", Fixed, Optional, "the optical density, 1.0-10.0",
         // MapKa => "map_Ka", "texture_file", Fixed, Once, "the ambiant texture",
         // MapKd => "map_Kd", "texture_file", Fixed, Once, "the diffuse texture",
         // MapKs => "map_Ks", "texture_file", Fixed, Once, "the specular texture",
@@ -35,6 +36,6 @@ rule! (
 
 pub fn parse(path: &Path) -> Result<Material> {
     let f = SpofedFile::new(path, Some(COMMENT), RuleMtl::build())?;
-    dbg!(f);
-    todo!()
+    let name = f[RuleMtl::Newmtl].data.get_first_token().to_string();
+    Ok(Material { name })
 }

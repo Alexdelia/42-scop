@@ -1,17 +1,17 @@
 mod face;
 mod handle_mtl;
-use handle_mtl::check_usemtl;
+use handle_mtl::{check_usemtl, get_mtl};
 
 use crate::{prelude::*, Vertex};
 
 use crate::obj::{EFace, Face};
 use crate::{Object, VertexPrecision};
 
+use super::mtl::parse as mtl_parse;
+
 use ansi::abbrev::{B, BLU, D, M};
 
 use spof::{rule, FileDataKey, SpofedFile};
-
-
 
 use std::path::{Path, PathBuf};
 
@@ -32,15 +32,14 @@ rule!(
     }
 );
 
-pub fn parse(obj_path: &Path, _mtl_path: &[PathBuf]) -> Result<Object> {
+pub fn parse(obj_path: &Path, mtl_path: &[PathBuf]) -> Result<Object> {
     let f = SpofedFile::new(obj_path, Some(COMMENT), RuleObj::build())?;
 
-    // let mtl = if let Some(p) = get_mtl(&f, mtl_path)? {
-    //     Some(mtl_parse(&p)?)
-    // } else {
-    //     None
-    // };
-    let mtl = None;
+    let mtl = if let Some(p) = get_mtl(&f, mtl_path)? {
+        Some(mtl_parse(&p)?)
+    } else {
+        None
+    };
 
     let usemtl = check_usemtl(&f, &mtl)?;
 

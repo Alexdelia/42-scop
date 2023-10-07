@@ -1,6 +1,5 @@
 mod load_dir;
 pub use load_dir::load_dir;
-mod file_data;
 
 mod mtl;
 mod obj;
