@@ -8,6 +8,7 @@ const ZC: &str = "\x1b[1;38;2;128;255;0m";
 
 const PADDING: usize = 9;
 
+#[cfg(not(debug_assertions))]
 pub fn header() {
     println!(
         "{B}{ASCII_COLORED_THE_ORDER}\n{CLEAR}{D}{DIM}{B}{ASCII_42}\t\t{D}{B}{COLOR_THE_ORDER}scop{D}"
@@ -15,8 +16,6 @@ pub fn header() {
 }
 
 fn control(color: &str, key: &[&str], description: &str) -> String {
-    let color = color.into();
-
     let mut len = key.join(", ").chars().collect::<Vec<_>>().len();
     if len < PADDING {
         len = PADDING - len;

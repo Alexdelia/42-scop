@@ -18,6 +18,7 @@ impl Mul for Matrix {
 
     fn mul(self, rhs: Matrix) -> Self::Output {
         let mut m = [[0.0; 4]; 4];
+        #[allow(clippy::needless_range_loop)]
         for a in 0..4 {
             for b in 0..4 {
                 for c in 0..4 {

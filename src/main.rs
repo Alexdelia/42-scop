@@ -1,5 +1,3 @@
-#![allow(unused)]
-
 mod env;
 mod event;
 mod gpu;
