@@ -1,3 +1,5 @@
+use super::Object;
+
 pub type VertexPrecision = f32;
 
 #[derive(Clone, Copy)]
@@ -22,6 +24,16 @@ impl Default for Vertex {
             color: [0.0, 0.0, 0.0, 1.0],
             texture: [0.0, 0.0],
         }
+    }
+}
+
+impl Object {
+    pub fn used_vertex(&self) -> Vec<&Vertex> {
+        self.face
+            .iter()
+            .map(|f| f.iter().map(|ef| &self.vertex[ef.vertex]))
+            .flatten()
+            .collect()
     }
 }
 

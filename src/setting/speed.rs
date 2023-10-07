@@ -1,4 +1,8 @@
-pub struct Speed(pub f32, pub bool);
+type SpeedPrecision = f32;
+
+pub struct Speed(pub SpeedPrecision, pub bool);
+
+const CHANGE_RATIO: SpeedPrecision = 1.5;
 
 impl Default for Speed {
     fn default() -> Self {
@@ -7,7 +11,7 @@ impl Default for Speed {
 }
 
 impl Speed {
-    pub fn get(&self) -> f32 {
+    pub fn get(&self) -> SpeedPrecision {
         if self.1 {
             self.0
         } else {
@@ -16,11 +20,11 @@ impl Speed {
     }
 
     pub fn inc(&mut self) {
-        self.0 *= 2.0;
+        self.0 *= CHANGE_RATIO;
     }
 
     pub fn dec(&mut self) {
-        self.0 /= 2.0;
+        self.0 /= CHANGE_RATIO;
     }
 
     pub fn pause(&mut self) {

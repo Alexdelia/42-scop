@@ -38,9 +38,9 @@ impl Bound {
 
     pub fn matrix(self) -> Matrix {
         let matrix = Matrix::translation(TranslationAmount {
-            z: -(self.min.x + self.max.x) / 2.0,
+            x: -(self.min.x + self.max.x) / 2.0,
             y: -(self.min.y + self.max.y) / 2.0,
-            x: -(self.min.z + self.max.z) / 2.0,
+            z: -(self.min.z + self.max.z) / 2.0,
         });
 
         let scale = 2.0
