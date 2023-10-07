@@ -1,8 +1,4 @@
-use crate::{
-    env::Env,
-    matrix::{Matrix},
-    LoopData,
-};
+use crate::{env::Env, matrix::Matrix, LoopData};
 
 use glium::Surface;
 
@@ -55,19 +51,4 @@ impl Env {
 
         frame.finish().unwrap();
     }
-}
-
-fn rotate_matrix(angle: f32) -> [[f32; 4]; 4] {
-    let c = angle.cos();
-    let s = angle.sin();
-    [
-        [c, 0.0, s, 0.0],
-        [0.0, 1.0, 0.0, 0.0],
-        [-s, 0.0, c, 0.0],
-        [0.0, 0.0, 0.0, 1.0f32],
-    ]
-}
-
-fn zoom_matrix(matrix: &mut [[f32; 4]; 4], amount: f32) {
-    matrix[3][2] += amount;
 }
