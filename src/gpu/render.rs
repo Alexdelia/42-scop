@@ -1,6 +1,6 @@
 use crate::{
     env::Env,
-    matrix::{transformation::TranslationAmount, Matrix},
+    matrix::{Matrix},
     LoopData,
 };
 

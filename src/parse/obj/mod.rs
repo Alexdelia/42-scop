@@ -4,14 +4,14 @@ use handle_mtl::check_usemtl;
 
 use crate::{prelude::*, Vertex};
 
-use crate::obj::{ColorType, EFace, Face};
+use crate::obj::{EFace, Face};
 use crate::{Object, VertexPrecision};
 
 use ansi::abbrev::{B, BLU, D, M};
 
 use spof::{rule, FileDataKey, SpofedFile};
 
-use rand::Rng;
+
 
 use std::path::{Path, PathBuf};
 

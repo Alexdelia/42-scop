@@ -70,7 +70,7 @@ fn check_ext(path: &Path) -> Ext {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::path::{Path, PathBuf};
+    use std::path::Path;
 
     impl PartialEq for Ext {
         fn eq(&self, other: &Self) -> bool {

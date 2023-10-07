@@ -47,8 +47,8 @@ impl ColorType {
     where
         I: IntoIterator<Item = &'a mut Vertex>,
     {
-        let mut min = VertexPrecision::MAX;
-        let mut max = VertexPrecision::MIN;
+        let min = VertexPrecision::MAX;
+        let max = VertexPrecision::MIN;
 
         let v = vertex.into_iter().collect::<Vec<_>>();
 

@@ -32,48 +32,20 @@ impl Color {
         v: ColorPrecision,
         a: ColorPrecision,
     ) -> Self {
-        let mut r = 0.0;
-        let mut g = 0.0;
-        let mut b = 0.0;
-        let mut i = (h * 6.0).floor() as i32;
-        let mut f = h * 6.0 - i as ColorPrecision;
-        let mut p = v * (1.0 - s);
-        let mut q = v * (1.0 - f * s);
-        let mut t = v * (1.0 - (1.0 - f) * s);
+        let i = (h * 6.0).floor() as i32;
+        let f = h * 6.0 - i as ColorPrecision;
+        let p = v * (1.0 - s);
+        let q = v * (1.0 - f * s);
+        let t = v * (1.0 - (1.0 - f) * s);
         match i % 6 {
-            0 => {
-                r = v;
-                g = t;
-                b = p;
-            }
-            1 => {
-                r = q;
-                g = v;
-                b = p;
-            }
-            2 => {
-                r = p;
-                g = v;
-                b = t;
-            }
-            3 => {
-                r = p;
-                g = q;
-                b = v;
-            }
-            4 => {
-                r = t;
-                g = p;
-                b = v;
-            }
-            5 => {
-                r = v;
-                g = p;
-                b = q;
-            }
+            0 => Self::new(v, t, p, a),
+            1 => Self::new(q, v, p, a),
+            2 => Self::new(p, v, t, a),
+            3 => Self::new(p, q, v, a),
+            4 => Self::new(t, p, v, a),
+            5 => Self::new(v, p, q, a),
             _ => unreachable!(),
         }
-        Self::new(r, g, b, a)
     }
 }
 

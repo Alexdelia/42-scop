@@ -1,5 +1,5 @@
 use crate::env::Env;
-use crate::{Color, ColorPrecision, VertexPrecision};
+use crate::{Color, ColorPrecision};
 
 use glium::glutin::{
     dpi::PhysicalPosition,
@@ -38,15 +38,15 @@ impl Env {
             if key == VKC::Escape {
                 EventOut::ControlFlow(ControlFlow::Exit)
             } else {
-                self.key_simple(key);
+                self.control_key(key);
                 EventOut::None
             }
         } else {
-            self.key_complex(input)
+            EventOut::None
         }
     }
 
-    fn key_simple(&mut self, key: VKC) {
+    fn control_key(&mut self, key: VKC) {
         match key {
             // flow
             VKC::Space => self.setting.speed.pause(),
@@ -70,9 +70,9 @@ impl Env {
             VKC::Plus | VKC::Equals => self.setting.speed.inc(),
             VKC::Minus => self.setting.speed.dec(),
             // translation
-            VKC::A | VKC::Q => self.setting.translation.x -= 0.1,
+            VKC::A => self.setting.translation.x -= 0.1,
             VKC::D => self.setting.translation.x += 0.1,
-            VKC::W | VKC::Z => self.setting.translation.y += 0.1,
+            VKC::W => self.setting.translation.y += 0.1,
             VKC::S => self.setting.translation.y -= 0.1,
             // rotation
             VKC::X => {
@@ -101,10 +101,6 @@ impl Env {
                 eprintln!("no bind for {key:?}");
             }
         };
-    }
-
-    fn key_complex(&self, input: KeyboardInput) -> EventOut {
-        EventOut::None
     }
 
     fn cursor(&mut self, position: &PhysicalPosition<f64>) -> EventOut {

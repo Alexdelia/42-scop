@@ -1,4 +1,4 @@
-use crate::{matrix::transformation::TranslationAmount, Matrix, Vertex, VertexPrecision};
+use crate::{matrix::transformation::TranslationAmount, Matrix, Vertex};
 
 use super::Point;
 

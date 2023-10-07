@@ -1,6 +1,6 @@
 use crate::Vertex;
 
-use super::{Bound, Face};
+use super::Bound;
 
 pub enum TextureType {
     Unit,
@@ -8,38 +8,25 @@ pub enum TextureType {
 }
 
 impl TextureType {
-    pub fn apply<'a, V, F>(&self, vertex: V, face: F)
+    pub fn apply<'a, I>(&self, vertex: I)
     where
-        V: IntoIterator<Item = &'a mut Vertex>,
-        F: IntoIterator<Item = &'a Face>,
+        I: IntoIterator<Item = &'a mut Vertex>,
     {
         match self {
-            TextureType::Unit => Self::unit(vertex, face),
+            TextureType::Unit => Self::unit(vertex),
             TextureType::Global => Self::global(vertex),
         }
     }
 
-    fn unit<'a, V, F>(vertex: V, face: F)
+    fn unit<'a, I>(vertex: I)
     where
-        V: IntoIterator<Item = &'a mut Vertex>,
-        F: IntoIterator<Item = &'a Face>,
+        I: IntoIterator<Item = &'a mut Vertex>,
     {
-        let mut vertex = vertex.into_iter().collect::<Vec<_>>();
+        for v in vertex {
+            let [x, y, z, ..] = v.position;
 
-        for f in face.into_iter() {
-            let local_vertex = f
-                .iter()
-                .map(|eface| *vertex[eface.vertex])
-                .collect::<Vec<_>>();
-
-            let bound = Bound::new(&local_vertex);
-
-            for v in vertex.iter_mut() {
-                let [x, y, z, ..] = v.position;
-
-                v.texture[0] = (x + z) / 2.0;
-                v.texture[1] = y;
-            }
+            v.texture[0] = (x + z) / 2.0;
+            v.texture[1] = y;
         }
     }
 
