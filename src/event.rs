@@ -42,6 +42,7 @@ impl Env {
                 EventOut::None
             }
         } else {
+            dbg!(input);
             EventOut::None
         }
     }
@@ -66,6 +67,7 @@ impl Env {
             VKC::Right => {
                 self.gpu.object.next();
             }
+            VKC::E => self.setting.enlighten = !self.setting.enlighten,
             // speed
             VKC::Plus | VKC::Equals => self.setting.speed.inc(),
             VKC::Minus => self.setting.speed.dec(),
@@ -89,7 +91,7 @@ impl Env {
                 self.gpu.object.get_mut().0.next();
             }
             // texture
-            VKC::T => self.gpu.texture_on = !self.gpu.texture_on,
+            VKC::T => self.setting.textured = !self.setting.textured,
             VKC::Key5 | VKC::Numpad5 => {
                 self.gpu.texture.prev();
             }

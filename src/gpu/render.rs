@@ -1,6 +1,16 @@
-use crate::{env::Env, matrix::Matrix, LoopData};
+use crate::{ColorPrecision, Env, LoopData, Matrix};
 
-use glium::Surface;
+use glium::{implement_uniform_block, uniforms::UniformBuffer, Surface};
+
+#[repr(C)]
+#[derive(Clone, Copy)]
+struct ColorBuffer {
+    colors: [[ColorPrecision; 4]; 5],
+    len: u32,
+    in_use: bool,
+}
+
+implement_uniform_block!(ColorBuffer, colors, len, in_use);
 
 impl Env {
     pub fn render(&self, data: &LoopData) {
@@ -16,15 +26,38 @@ impl Env {
             1.0,
         );
 
-        let mut matrix = self.gpu.object.get().2;
-        matrix *= Matrix::rotation(data.rotation);
-        matrix *= Matrix::translation(self.setting.translation);
+        let mut model = self.gpu.object.get().2;
+        model *= Matrix::rotation(data.rotation);
+        model *= Matrix::translation(self.setting.translation);
+
+        let color_buffer = UniformBuffer::immutable(
+            &self.display,
+            ColorBuffer {
+                colors: [
+                    [1.0, 0.0, 0.0, 0.3],
+                    [0.0, 1.0, 0.0, 1.0],
+                    [0.0, 0.0, 1.0, 1.0],
+                    [1.0, 1.0, 0.0, 1.0],
+                    [1.0, 0.0, 1.0, 1.0],
+                ],
+                len: 5,
+                in_use: true,
+            },
+        )
+        .unwrap();
 
         let uniform = glium::uniform! {
-            matrix: matrix.0,
-            perspective: Matrix::perspective(frame.get_dimensions()).0,
+            perspective: Matrix::perspective(frame.get_dimensions()),
+            model: model,
+
+            ColorBuffer: { &color_buffer },
+
             tex: self.gpu.texture.get(),
-            texture_on: self.gpu.texture_on,
+            textured: self.setting.textured,
+
+            enlighten: self.setting.enlighten,
+            light: [-1.0, 0.4, -0.5f32],
+            strength: 0.2f32,
         };
 
         let params = glium::DrawParameters {

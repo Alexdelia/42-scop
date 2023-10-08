@@ -29,6 +29,8 @@ pub struct Setting {
     pub speed: Speed,
     pub translation: TranslationAmount,
     pub rotate: RotateAxis,
+    pub textured: bool,
+    pub enlighten: bool,
 }
 
 impl Default for Setting {
@@ -59,6 +61,8 @@ impl Default for Setting {
                 y: RotationType::Clockwise,
                 z: RotationType::None,
             },
+            textured: false,
+            enlighten: true,
         }
     }
 }

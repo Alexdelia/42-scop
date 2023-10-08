@@ -86,21 +86,27 @@ pub fn help() {
         reverse = control(&format!("{I}{M}"), &["R"], "reverse"),
         fps_inc = control(BLU, &["↑"], "increase fps"),
         fps_dec = control(BLU, &["↓"], "decrease fps"),
+        //
         obj_prev = control(OC, &["←"], "previous object"),
         obj_next = control(OC, &["→"], "next object"),
+        //
         speed_inc = control(Y, &["+", "="], "increase speed"),
         speed_dec = control(Y, &["-"], "decrease speed"),
+        //
         move_left = control(XC, &["A"], "move left"),
         move_right = control(XC, &["D"], "move right"),
         move_up = control(YC, &["W"], "move up"),
         move_down = control(YC, &["S"], "move down"),
         move_forward = control(&format!("{I}{ZC}"), &["scroll ⤉"], "move forward"),
         move_backward = control(&format!("{I}{ZC}"), &["scroll ⤈"], "move backward"),
+        //
         rotate_x = control(XC, &["X"], "rotate around the X axis"),
         rotate_y = control(YC, &["Y"], "rotate around the Y axis"),
         rotate_z = control(ZC, &["Z"], "rotate around the Z axis"),
+        //
         color_change = control(R, &["C"], "change color pattern"),
-        texture_on = control(&format!("{BG_BLACK}{G}"), &["T"], "turn on/off texture"),
+        //
+        texture_on = control(&format!("{BG_BLACK}{G}"), &["T"], "toggle texture on/off"),
         texture_prev = control(&format!("{BG_BLACK}{G}"), &["5"], "previous texture"),
         texture_next = control(&format!("{BG_BLACK}{G}"), &["6"], "next texture"),
         texture_change = control(&format!("{BG_BLACK}{G}"), &["C"], "change texture pattern"),

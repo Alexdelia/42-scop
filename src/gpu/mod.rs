@@ -22,7 +22,6 @@ pub struct Gpu {
     pub program: glium::Program,
     pub object: GpuObject,
     pub texture: IVec<glium::texture::SrgbTexture2d>,
-    pub texture_on: bool,
 }
 
 impl Gpu {
@@ -38,7 +37,6 @@ impl Gpu {
             )?,
             object: obj_data,
             texture: load_texture(display).into(),
-            texture_on: false,
         })
     }
 }

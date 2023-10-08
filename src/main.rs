@@ -10,7 +10,7 @@ mod setting;
 
 use prelude::*;
 
-pub use obj::{Color, ColorPrecision, Object, Vertex, VertexPrecision};
+pub use obj::{Color, ColorPrecision, Object, Point, Vertex, VertexPrecision};
 
 pub use matrix::{transformation::RotationAmount, Matrix};
 

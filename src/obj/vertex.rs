@@ -7,9 +7,10 @@ pub struct Vertex {
     pub position: [VertexPrecision; 4],
     pub color: [VertexPrecision; 4],
     pub texture: [VertexPrecision; 2],
+    pub normal: [VertexPrecision; 3],
 }
 
-glium::implement_vertex!(Vertex, position, color, texture);
+glium::implement_vertex!(Vertex, position, color, texture, normal);
 
 pub struct Point {
     pub x: VertexPrecision,
@@ -23,6 +24,7 @@ impl Default for Vertex {
             position: [0.0, 0.0, 0.0, 1.0],
             color: [0.0, 0.0, 0.0, 1.0],
             texture: [0.0, 0.0],
+            normal: [0.0, 0.0, 0.0],
         }
     }
 }
@@ -67,5 +69,11 @@ impl Vertex {
 
     pub fn a(&self) -> VertexPrecision {
         self.color[3]
+    }
+}
+
+impl Point {
+    pub fn new(x: VertexPrecision, y: VertexPrecision, z: VertexPrecision) -> Self {
+        Self { x, y, z }
     }
 }

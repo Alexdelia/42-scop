@@ -1,3 +1,4 @@
+mod perspective;
 pub mod transformation;
 
 use crate::VertexPrecision;
@@ -6,6 +7,12 @@ use std::ops::{Mul, MulAssign};
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct Matrix(pub [[VertexPrecision; 4]; 4]);
+
+impl glium::uniforms::AsUniformValue for Matrix {
+    fn as_uniform_value(&self) -> glium::uniforms::UniformValue {
+        glium::uniforms::UniformValue::Mat4(self.0)
+    }
+}
 
 impl Default for Matrix {
     fn default() -> Self {

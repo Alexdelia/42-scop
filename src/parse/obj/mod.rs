@@ -4,7 +4,7 @@ use handle_mtl::{check_usemtl, get_mtl};
 
 use crate::{prelude::*, Vertex};
 
-use crate::obj::{EFace, Face};
+use crate::obj::{EFace, Face, VertexNormal, VertexTexture};
 use crate::{Object, VertexPrecision};
 
 use super::mtl::parse as mtl_parse;
@@ -60,8 +60,21 @@ pub fn parse(obj_path: &Path, mtl_path: &[PathBuf]) -> Result<Object> {
     );
     let group = f[RuleObj::G].data.first_token().map(|t| t.to_string());
 
-    let v = v
-        .into_iter()
+    Ok(Object {
+        name,
+        group,
+        vertex: vertex(v),
+        texture: texture(vt),
+        normal: normal(vn),
+        // parameter_space: vp,
+        face,
+        material: if usemtl { mtl } else { None },
+        smooth: false,
+    })
+}
+
+fn vertex(v: Vec<Vec<VertexPrecision>>) -> Vec<Vertex> {
+    v.into_iter()
         .map(|vertices| Vertex {
             position: [
                 vertices[0],
@@ -69,21 +82,28 @@ pub fn parse(obj_path: &Path, mtl_path: &[PathBuf]) -> Result<Object> {
                 vertices[2],
                 *vertices.get(3).unwrap_or(&1.0),
             ],
+            normal: [vertices[0], vertices[1], vertices[2]],
             ..Default::default()
         })
-        .collect();
+        .collect()
+}
 
-    Ok(Object {
-        name,
-        group,
-        vertex: v,
-        // texture: vt,
-        texture: vec![],
-        // normal: vn,
-        normal: vec![],
-        // parameter_space: vp,
-        face,
-        material: if usemtl { mtl } else { None },
-        smooth: false,
-    })
+fn texture(v: Vec<Vec<VertexPrecision>>) -> Vec<VertexTexture> {
+    v.into_iter()
+        .map(|vertices| VertexTexture {
+            u: vertices[0],
+            v: vertices[1],
+            w: *vertices.get(2).unwrap_or(&0.0),
+        })
+        .collect()
+}
+
+fn normal(v: Vec<Vec<VertexPrecision>>) -> Vec<VertexNormal> {
+    v.into_iter()
+        .map(|vertices| VertexNormal {
+            x: vertices[0],
+            y: vertices[1],
+            z: vertices[2],
+        })
+        .collect()
 }
