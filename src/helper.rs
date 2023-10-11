@@ -9,7 +9,7 @@ const XC: &str = "\x1b[1;38;2;0;128;255m";
 const YC: &str = "\x1b[1;38;2;255;0;128m";
 const ZC: &str = "\x1b[1;38;2;128;255;0m";
 
-const PADDING: usize = 10;
+const PADDING: usize = 11;
 
 #[cfg(not(debug_assertions))]
 pub fn header() {
@@ -176,14 +176,14 @@ pub fn help() {
         fps_inc = control(
             BLU,
             Some(ModifiersState::ALT),
-            &["↑"],
+            &["+", "="],
             "increase fps",
             Some(ModifiersState::CTRL)
         ),
         fps_dec = control(
             BLU,
             Some(ModifiersState::ALT),
-            &["↓"],
+            &["-"],
             "decrease fps",
             Some(ModifiersState::CTRL)
         ),

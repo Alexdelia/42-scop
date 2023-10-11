@@ -1,6 +1,6 @@
-use crate::env::Env;
-use crate::{Color, ColorPrecision};
+use crate::{setting::RotationType, Color, ColorPrecision, Env};
 
+use glium::glutin::event::ModifiersState as MS;
 use glium::glutin::{
     dpi::PhysicalPosition,
     event::{
@@ -19,26 +19,30 @@ impl Env {
         match event {
             Event::WindowEvent { event, .. } => match event {
                 WindowEvent::CloseRequested => EventOut::ControlFlow(ControlFlow::Exit),
-                WindowEvent::KeyboardInput { input, .. } => self.key(input),
+                WindowEvent::KeyboardInput { input, .. } => self.key(input, self.setting.modifier),
                 WindowEvent::CursorMoved { position, .. } => self.cursor(&position),
-                WindowEvent::MouseWheel { delta, .. } => self.wheel(delta),
+                WindowEvent::MouseWheel { delta, .. } => self.wheel(delta, self.setting.modifier),
+                WindowEvent::ModifiersChanged(modifier) => {
+                    self.setting.modifier = modifier;
+                    EventOut::None
+                }
                 _ => EventOut::None,
             },
             _ => EventOut::None,
         }
     }
 
-    fn key(&mut self, input: KeyboardInput) -> EventOut {
+    fn key(&mut self, input: KeyboardInput, modifier: MS) -> EventOut {
         if let KeyboardInput {
             state: ElementState::Pressed,
             virtual_keycode: Some(key),
             ..
         } = input
         {
-            if key == VKC::Escape {
+            if key == VKC::Escape && modifier == MS::empty() {
                 EventOut::ControlFlow(ControlFlow::Exit)
             } else {
-                self.control_key(key);
+                self.control_key(modifier, key);
                 EventOut::None
             }
         } else {
@@ -47,7 +51,8 @@ impl Env {
         }
     }
 
-    fn control_key(&mut self, key: VKC) {
+    fn control_key(&mut self, modifier: MS, key: VKC) {
+        /*
         match key {
             // flow
             VKC::Space => self.setting.speed.pause(),
@@ -103,6 +108,92 @@ impl Env {
                 eprintln!("no bind for {key:?}");
             }
         };
+        */
+        match key {
+            // flow
+            VKC::Space if modifier == MS::empty() => self.setting.speed.pause(),
+            VKC::R if modifier == MS::empty() => self.setting.speed.revert(),
+            // speed
+            VKC::Plus | VKC::Equals if modifier == MS::empty() => self.setting.speed.inc(),
+            VKC::Plus | VKC::Equals if modifier == MS::CTRL => self.setting.speed.dec(),
+            VKC::Minus if modifier == MS::empty() => self.setting.speed.dec(),
+            VKC::Minus if modifier == MS::CTRL => self.setting.speed.inc(),
+            VKC::Plus | VKC::Equals if modifier == MS::ALT => {
+                self.setting.fps.next();
+            }
+            VKC::Plus | VKC::Equals if modifier == (MS::CTRL | MS::ALT) => {
+                self.setting.fps.prev();
+            }
+            VKC::Minus if modifier == MS::ALT => {
+                self.setting.fps.prev();
+            }
+            VKC::Minus if modifier == (MS::CTRL | MS::ALT) => {
+                self.setting.fps.next();
+            }
+            // object
+            VKC::Left if modifier == MS::empty() => {
+                self.gpu.object.prev();
+            }
+            VKC::Left if modifier == MS::CTRL => {
+                self.gpu.object.prev();
+            }
+            VKC::Right if modifier == MS::empty() => {
+                self.gpu.object.next();
+            }
+            VKC::Right if modifier == MS::CTRL => {
+                self.gpu.object.next();
+            }
+            // translation
+            VKC::A if modifier == MS::empty() => self.setting.translation.x -= 0.1,
+            VKC::D if modifier == MS::empty() => self.setting.translation.x += 0.1,
+            VKC::W if modifier == MS::empty() => self.setting.translation.y += 0.1,
+            VKC::S if modifier == MS::empty() => self.setting.translation.y -= 0.1,
+            // rotation
+            VKC::X if modifier == MS::empty() => self.setting.rotate.x = RotationType::Clockwise,
+            VKC::X if modifier == MS::CTRL => {
+                self.setting.rotate.x = RotationType::CounterClockwise
+            }
+            VKC::X if modifier == MS::ALT => self.setting.rotate.x = RotationType::None,
+            VKC::Y if modifier == MS::empty() => self.setting.rotate.y = RotationType::Clockwise,
+            VKC::Y if modifier == MS::CTRL => {
+                self.setting.rotate.y = RotationType::CounterClockwise
+            }
+            VKC::Y if modifier == MS::ALT => self.setting.rotate.y = RotationType::None,
+            VKC::Z if modifier == MS::empty() => self.setting.rotate.z = RotationType::Clockwise,
+            VKC::Z if modifier == MS::CTRL => {
+                self.setting.rotate.z = RotationType::CounterClockwise
+            }
+            VKC::Z if modifier == MS::ALT => self.setting.rotate.z = RotationType::None,
+            // light
+            VKC::E | VKC::L if modifier == MS::empty() => {
+                self.setting.enlighten = !self.setting.enlighten
+            }
+            // color
+            VKC::C if modifier == MS::empty() => {
+                self.gpu.object.get_mut().0.next();
+            }
+            VKC::C if modifier == MS::CTRL => {
+                self.gpu.object.get_mut().0.prev();
+            }
+            // texture
+            VKC::T if modifier == MS::empty() => self.setting.textured = !self.setting.textured,
+            VKC::Left if modifier == MS::ALT => {
+                self.gpu.texture.prev();
+            }
+            VKC::Left if modifier == (MS::CTRL | MS::ALT) => {
+                self.gpu.texture.next();
+            }
+            VKC::Right if modifier == MS::ALT => {
+                self.gpu.texture.next();
+            }
+            VKC::Right if modifier == (MS::CTRL | MS::ALT) => {
+                self.gpu.texture.prev();
+            }
+            _ => {
+                #[cfg(debug_assertions)]
+                eprintln!("no bind for {modifier:?} + {key:?}");
+            }
+        }
     }
 
     fn cursor(&mut self, position: &PhysicalPosition<f64>) -> EventOut {
@@ -121,7 +212,11 @@ impl Env {
         EventOut::None
     }
 
-    fn wheel(&mut self, delta: MouseScrollDelta) -> EventOut {
+    fn wheel(&mut self, delta: MouseScrollDelta, modifier: MS) -> EventOut {
+        if modifier != MS::empty() {
+            return EventOut::None;
+        }
+
         match delta {
             MouseScrollDelta::LineDelta(_x, y) => {
                 if y > 0.0 {

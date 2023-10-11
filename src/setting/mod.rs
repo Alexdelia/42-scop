@@ -1,5 +1,5 @@
 mod rotation;
-use rotation::{RotateAxis, RotationType};
+pub use rotation::{RotateAxis, RotationType};
 mod speed;
 use speed::Speed;
 
@@ -13,7 +13,7 @@ use ansi::{
     CLEAR_LINE,
 };
 
-use glium::glutin::event_loop::ControlFlow;
+use glium::glutin::{event::ModifiersState, event_loop::ControlFlow};
 
 use std::path::Path;
 use std::time::{Duration, Instant};
@@ -24,6 +24,7 @@ pub const OBJ_PATH: &str = "resources/obj/";
 pub struct Setting {
     pub title: &'static str,
     pub icon: &'static Path,
+    pub modifier: ModifiersState,
     pub fps: IVec<Option<u8>>,
     pub bg_color: Color,
     pub speed: Speed,
@@ -38,6 +39,7 @@ impl Default for Setting {
         Self {
             title: "scop",
             icon: Path::new("src/icon.png"),
+            modifier: ModifiersState::default(),
             fps: vec![
                 None,
                 Some(5),
