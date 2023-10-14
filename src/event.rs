@@ -52,63 +52,6 @@ impl Env {
     }
 
     fn control_key(&mut self, modifier: MS, key: VKC) {
-        /*
-        match key {
-            // flow
-            VKC::Space => self.setting.speed.pause(),
-            VKC::R => self.setting.speed.revert(),
-            VKC::Up => {
-                self.setting.fps.next();
-                self.setting.print_fps();
-            }
-            VKC::Down => {
-                self.setting.fps.prev();
-                self.setting.print_fps();
-            }
-            // object
-            VKC::Left => {
-                self.gpu.object.prev();
-            }
-            VKC::Right => {
-                self.gpu.object.next();
-            }
-            VKC::E => self.setting.enlighten = !self.setting.enlighten,
-            // speed
-            VKC::Plus | VKC::Equals => self.setting.speed.inc(),
-            VKC::Minus => self.setting.speed.dec(),
-            // translation
-            VKC::A => self.setting.translation.x -= 0.1,
-            VKC::D => self.setting.translation.x += 0.1,
-            VKC::W => self.setting.translation.y += 0.1,
-            VKC::S => self.setting.translation.y -= 0.1,
-            // rotation
-            VKC::X => {
-                self.setting.rotate.x.next();
-            }
-            VKC::Y => {
-                self.setting.rotate.y.next();
-            }
-            VKC::Z => {
-                self.setting.rotate.z.next();
-            }
-            // color
-            VKC::C => {
-                self.gpu.object.get_mut().0.next();
-            }
-            // texture
-            VKC::T => self.setting.textured = !self.setting.textured,
-            VKC::Key5 | VKC::Numpad5 => {
-                self.gpu.texture.prev();
-            }
-            VKC::Key6 | VKC::Numpad6 => {
-                self.gpu.texture.next();
-            }
-            _ => {
-                #[cfg(debug_assertions)]
-                eprintln!("no bind for {key:?}");
-            }
-        };
-        */
         match key {
             // flow
             VKC::Space if modifier == MS::empty() => self.setting.speed.pause(),
@@ -169,12 +112,8 @@ impl Env {
                 self.setting.enlighten = !self.setting.enlighten
             }
             // color
-            VKC::C if modifier == MS::empty() => {
-                self.gpu.object.get_mut().0.next();
-            }
-            VKC::C if modifier == MS::CTRL => {
-                self.gpu.object.get_mut().0.prev();
-            }
+            VKC::C if modifier == MS::empty() => self.color_change(true),
+            VKC::C if modifier == MS::CTRL => self.color_change(false),
             // texture
             VKC::T if modifier == MS::empty() => self.setting.textured = !self.setting.textured,
             VKC::Left if modifier == MS::ALT => {
@@ -194,6 +133,35 @@ impl Env {
                 eprintln!("no bind for {modifier:?} + {key:?}");
             }
         }
+    }
+
+    fn color_change(&mut self, next: bool) {
+        let c_len = self.gpu.object.get().0.vec.len();
+        let cf_len = self.setting.color_face.0.vec.len();
+        let len = c_len + cf_len;
+        let i = (self.gpu.object.get().0.i
+            + self.setting.color_face.0.i
+            + if next { 1 } else { len - 1 })
+            % len;
+
+        dbg!(i, c_len, cf_len, len);
+
+        if i < c_len {
+            self.gpu.object.get_mut().0.i = i;
+            self.setting.color_face.0.i = 0;
+            self.setting.color_face.1 = false;
+        } else {
+            todo!("fix using color_face 0");
+            self.gpu.object.get_mut().0.i = self.gpu.object.get().0.vec.len() - 1;
+            self.setting.color_face.0.i = i - c_len + 1;
+            self.setting.color_face.1 = true;
+        }
+
+        dbg!(
+            self.gpu.object.get().0.i,
+            self.setting.color_face.0.i,
+            self.setting.color_face.1
+        );
     }
 
     fn cursor(&mut self, position: &PhysicalPosition<f64>) -> EventOut {

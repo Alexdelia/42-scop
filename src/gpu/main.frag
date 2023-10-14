@@ -12,11 +12,11 @@ uniform bool textured;
 uniform bool enlighten;
 uniform vec3 light;
 uniform float strength;
+uniform bool use_color_buffer;
 
 layout(std140) buffer ColorBuffer {
 	vec4 colors[5];
 	uint len;
-	bool in_use;
 };
 
 vec4 get_enlightened_color(vec4 base_color) {
@@ -32,25 +32,12 @@ vec4 get_enlightened_color(vec4 base_color) {
 }
 
 void main() {
-	// if (textured)
-	// 	out_color = texture(tex, v_texture);
-	// else
-	// 	out_color = v_color;
-    
-	// float diffuse = max(dot(normalize(v_normal), normalize(light)), 0.0);
-
-    // vec3 camera_dir = normalize(vec3(-v_position));
-    // vec3 half_direction = normalize(normalize(light) + camera_dir);
-    // float specular = pow(max(dot(half_direction, normalize(v_normal)), 0.0), 16.0);
-
-    // out_color = out_color * vec4(ambient_color + diffuse * diffuse_color + specular * specular_color, 1.0);
-
 	vec4 raw_color;
 
     if (textured) {
         raw_color = texture(tex, v_texture);
     } else {
-		if (in_use)
+		if (use_color_buffer)
         	raw_color = colors[gl_PrimitiveID % len];
 		else
 			raw_color = v_color;

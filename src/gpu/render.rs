@@ -7,10 +7,9 @@ use glium::{implement_uniform_block, uniforms::UniformBuffer, Surface};
 struct ColorBuffer {
     colors: [[ColorPrecision; 4]; 5],
     len: u32,
-    in_use: bool,
 }
 
-implement_uniform_block!(ColorBuffer, colors, len, in_use);
+implement_uniform_block!(ColorBuffer, colors, len);
 
 impl Env {
     pub fn render(&self, data: &LoopData) {
@@ -33,15 +32,8 @@ impl Env {
         let color_buffer = UniformBuffer::immutable(
             &self.display,
             ColorBuffer {
-                colors: [
-                    [1.0, 0.0, 0.0, 0.3],
-                    [0.0, 1.0, 0.0, 1.0],
-                    [0.0, 0.0, 1.0, 1.0],
-                    [1.0, 1.0, 0.0, 1.0],
-                    [1.0, 0.0, 1.0, 1.0],
-                ],
-                len: 5,
-                in_use: true,
+                colors: self.setting.color_face.0.get().colors,
+                len: self.setting.color_face.0.get().len,
             },
         )
         .unwrap();
@@ -50,7 +42,8 @@ impl Env {
             perspective: Matrix::perspective(frame.get_dimensions()),
             model: model,
 
-            ColorBuffer: { &color_buffer },
+            ColorBuffer: &color_buffer,
+            use_color_buffer: self.setting.color_face.1,
 
             tex: self.gpu.texture.get(),
             textured: self.setting.textured,
