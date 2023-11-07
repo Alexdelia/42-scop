@@ -2,7 +2,7 @@ use std::path::Path;
 
 pub fn load_dir(dir: impl AsRef<Path>) -> std::io::Result<Vec<std::path::PathBuf>> {
     let path = dir.as_ref();
-    Ok(std::fs::read_dir(path)
+    let mut file: Vec<std::path::PathBuf> = std::fs::read_dir(path)
         .map_err(|e| {
             eprintln!("failed to read directory '{}'\n{e}", path.display());
             e
@@ -17,5 +17,7 @@ pub fn load_dir(dir: impl AsRef<Path>) -> std::io::Result<Vec<std::path::PathBuf
                 }
             })
         })
-        .collect())
+        .collect();
+    file.sort();
+    Ok(file)
 }
