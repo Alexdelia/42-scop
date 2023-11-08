@@ -1,12 +1,12 @@
 use rand::Rng;
 
 use super::Color;
-use crate::{Vertex, VertexPrecision};
+use crate::{Axis, Vertex, VertexPrecision};
 
 pub enum ColorType {
     Random,
     Selection(Vec<Color>),
-    YGradient((Color, Color)),
+    Gradient(Axis, (Color, Color)),
 }
 
 impl ColorType {
@@ -17,7 +17,7 @@ impl ColorType {
         match self {
             ColorType::Random => Self::random(vertex),
             ColorType::Selection(colors) => Self::selection(vertex, colors),
-            ColorType::YGradient((start, end)) => Self::y_gradient(vertex, start, end),
+            ColorType::Gradient(axis, (start, end)) => Self::gradient(vertex, axis, start, end),
         }
     }
 
@@ -43,7 +43,7 @@ impl ColorType {
         }
     }
 
-    fn y_gradient<'a, I>(vertex: I, start: &Color, end: &Color)
+    fn gradient<'a, I>(vertex: I, axis: &Axis, start: &Color, end: &Color)
     where
         I: IntoIterator<Item = &'a mut Vertex>,
     {
@@ -53,14 +53,13 @@ impl ColorType {
         let v = vertex.into_iter().collect::<Vec<_>>();
 
         let (min, max) = v.iter().fold((min, max), |(min, max), v| {
-            let [_, y, ..] = v.position;
+            let a = v.axis(*axis);
 
-            (min.min(y), max.max(y))
+            (min.min(a), max.max(a))
         });
 
         for v in v.into_iter() {
-            let [_, y, ..] = v.position;
-            let t = (y - min) / (max - min);
+            let t = (v.axis(*axis) - min) / (max - min);
 
             v.color[0] = start.r + (end.r - start.r) * t;
             v.color[1] = start.g + (end.g - start.g) * t;

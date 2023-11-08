@@ -1,3 +1,4 @@
+mod axis;
 mod env;
 mod event;
 mod gpu;
@@ -13,6 +14,8 @@ use prelude::*;
 pub use obj::{Color, ColorPrecision, Object, Point, Vertex, VertexPrecision};
 
 pub use matrix::{transformation::RotationAmount, Matrix};
+
+pub use axis::Axis;
 
 use env::Env;
 use event::EventOut;

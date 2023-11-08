@@ -1,3 +1,5 @@
+use crate::Axis;
+
 use super::Object;
 
 pub type VertexPrecision = f32;
@@ -69,6 +71,14 @@ impl Vertex {
 
     pub fn a(&self) -> VertexPrecision {
         self.color[3]
+    }
+
+    pub fn axis(&self, axis: Axis) -> VertexPrecision {
+        match axis {
+            Axis::X => self.x(),
+            Axis::Y => self.y(),
+            Axis::Z => self.z(),
+        }
     }
 }
 

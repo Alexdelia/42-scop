@@ -2,7 +2,7 @@ use crate::prelude::*;
 
 use crate::{
     obj::{Bound, ColorType, TextureType},
-    Color, Object,
+    Axis, Color, Object,
 };
 
 use super::GpuObject;
@@ -17,14 +17,27 @@ fn color_option() -> Vec<ColorType> {
             Color::new(0.2, 0.2, 0.2, 1.0),
             Color::new(0.3, 0.3, 0.3, 1.0),
         ]),
-        ColorType::YGradient((
-            Color::new(1.0, 0.0, 0.0, 1.0),
-            Color::new(0.0, 0.0, 1.0, 1.0),
-        )),
-        ColorType::YGradient((
-            Color::new(0.0, 1.0, 0.33, 0.0),
-            Color::new(0.0, 1.0, 0.0, 1.0),
-        )),
+        ColorType::Gradient(
+            Axis::Y,
+            (
+                Color::new(0.0, 1.0, 0.33, 0.0),
+                Color::new(0.0, 1.0, 0.0, 1.0),
+            ),
+        ),
+        ColorType::Gradient(
+            Axis::Z,
+            (
+                Color::new(1.0, 0.0, 0.0, 1.0),
+                Color::new(0.0, 0.0, 1.0, 1.0),
+            ),
+        ),
+        ColorType::Gradient(
+            Axis::X,
+            (
+                Color::new(0.33, 1.0, 0.0, 1.0),
+                Color::new(0.0, 0.33, 1.0, 1.0),
+            ),
+        ),
     ]
 }
 
