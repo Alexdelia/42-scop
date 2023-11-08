@@ -39,14 +39,13 @@ impl Env {
             ..
         } = input
         {
-            if key == VKC::Escape && modifier == MS::empty() {
+            if modifier == MS::empty() && (key == VKC::Escape || key == VKC::Q) {
                 EventOut::ControlFlow(ControlFlow::Exit)
             } else {
                 self.control_key(modifier, key);
                 EventOut::None
             }
         } else {
-            dbg!(input);
             EventOut::None
         }
     }
@@ -57,33 +56,22 @@ impl Env {
             VKC::Space if modifier == MS::empty() => self.setting.speed.pause(),
             VKC::R if modifier == MS::empty() => self.setting.speed.revert(),
             // speed
+            // also VKC::Equals to not bother about the keyboard layout
             VKC::Plus | VKC::Equals if modifier == MS::empty() => self.setting.speed.inc(),
-            VKC::Plus | VKC::Equals if modifier == MS::CTRL => self.setting.speed.dec(),
             VKC::Minus if modifier == MS::empty() => self.setting.speed.dec(),
-            VKC::Minus if modifier == MS::CTRL => self.setting.speed.inc(),
             VKC::Plus | VKC::Equals if modifier == MS::ALT => {
                 self.setting.fps.next();
-            }
-            VKC::Plus | VKC::Equals if modifier == (MS::CTRL | MS::ALT) => {
-                self.setting.fps.prev();
+                self.setting.print_fps();
             }
             VKC::Minus if modifier == MS::ALT => {
                 self.setting.fps.prev();
-            }
-            VKC::Minus if modifier == (MS::CTRL | MS::ALT) => {
-                self.setting.fps.next();
+                self.setting.print_fps();
             }
             // object
             VKC::Left if modifier == MS::empty() => {
                 self.gpu.object.prev();
             }
-            VKC::Left if modifier == MS::CTRL => {
-                self.gpu.object.prev();
-            }
             VKC::Right if modifier == MS::empty() => {
-                self.gpu.object.next();
-            }
-            VKC::Right if modifier == MS::CTRL => {
                 self.gpu.object.next();
             }
             // translation
@@ -96,17 +84,17 @@ impl Env {
             VKC::X if modifier == MS::CTRL => {
                 self.setting.rotate.x = RotationType::CounterClockwise
             }
-            VKC::X if modifier == MS::ALT => self.setting.rotate.x = RotationType::None,
+            VKC::X if modifier == MS::SHIFT => self.setting.rotate.x = RotationType::None,
             VKC::Y if modifier == MS::empty() => self.setting.rotate.y = RotationType::Clockwise,
             VKC::Y if modifier == MS::CTRL => {
                 self.setting.rotate.y = RotationType::CounterClockwise
             }
-            VKC::Y if modifier == MS::ALT => self.setting.rotate.y = RotationType::None,
+            VKC::Y if modifier == MS::SHIFT => self.setting.rotate.y = RotationType::None,
             VKC::Z if modifier == MS::empty() => self.setting.rotate.z = RotationType::Clockwise,
             VKC::Z if modifier == MS::CTRL => {
                 self.setting.rotate.z = RotationType::CounterClockwise
             }
-            VKC::Z if modifier == MS::ALT => self.setting.rotate.z = RotationType::None,
+            VKC::Z if modifier == MS::SHIFT => self.setting.rotate.z = RotationType::None,
             // light
             VKC::E | VKC::L if modifier == MS::empty() => {
                 self.setting.enlighten = !self.setting.enlighten
@@ -119,14 +107,8 @@ impl Env {
             VKC::Left if modifier == MS::ALT => {
                 self.gpu.texture.prev();
             }
-            VKC::Left if modifier == (MS::CTRL | MS::ALT) => {
-                self.gpu.texture.next();
-            }
             VKC::Right if modifier == MS::ALT => {
                 self.gpu.texture.next();
-            }
-            VKC::Right if modifier == (MS::CTRL | MS::ALT) => {
-                self.gpu.texture.prev();
             }
             _ => {
                 #[cfg(debug_assertions)]
@@ -144,24 +126,15 @@ impl Env {
             + if next { 1 } else { len - 1 })
             % len;
 
-        dbg!(i, c_len, cf_len, len);
-
         if i < c_len {
             self.gpu.object.get_mut().0.i = i;
             self.setting.color_face.0.i = 0;
             self.setting.color_face.1 = false;
         } else {
-            todo!("fix using color_face 0");
-            self.gpu.object.get_mut().0.i = self.gpu.object.get().0.vec.len() - 1;
-            self.setting.color_face.0.i = i - c_len + 1;
+            self.gpu.object.get_mut().0.i = self.gpu.object.get().0.vec.len();
+            self.setting.color_face.0.i = i - c_len;
             self.setting.color_face.1 = true;
         }
-
-        dbg!(
-            self.gpu.object.get().0.i,
-            self.setting.color_face.0.i,
-            self.setting.color_face.1
-        );
     }
 
     fn cursor(&mut self, position: &PhysicalPosition<f64>) -> EventOut {

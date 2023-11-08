@@ -155,65 +155,41 @@ pub fn help() {
 {texture_change}
 ",
         // flow
-        quit = control(&format!("{I}{RED}"), None, &["esc"], "quit", None),
+        quit = control(
+            &format!("{I}{RED}"),
+            None,
+            &["esc", &format!("{N_I}Q    ")],
+            "quit",
+            None
+        ),
         pause = control(&format!("{I}{Y}"), None, &["space"], "pause", None),
         reverse = control(M, None, &["R"], "reverse", None),
         // speed
-        speed_inc = control(
-            Y,
-            None,
-            &["+", "="],
-            "increase speed",
-            Some(ModifiersState::CTRL)
-        ),
-        speed_dec = control(
-            Y,
-            None,
-            &["-"],
-            "decrease speed",
-            Some(ModifiersState::CTRL)
-        ),
-        fps_inc = control(
-            BLU,
-            Some(ModifiersState::ALT),
-            &["+", "="],
-            "increase fps",
-            Some(ModifiersState::CTRL)
-        ),
-        fps_dec = control(
-            BLU,
-            Some(ModifiersState::ALT),
-            &["-"],
-            "decrease fps",
-            Some(ModifiersState::CTRL)
-        ),
+        speed_inc = control(Y, None, &["+"], "increase speed", None,),
+        speed_dec = control(Y, None, &["-"], "decrease speed", None,),
+        fps_inc = control(BLU, Some(ModifiersState::ALT), &["+"], "increase fps", None,),
+        fps_dec = control(BLU, Some(ModifiersState::ALT), &["-"], "decrease fps", None,),
         // object
-        obj_prev = control(
-            OC,
-            None,
-            &["←"],
-            "previous object",
-            Some(ModifiersState::CTRL)
-        ),
-        obj_next = control(OC, None, &["→"], "next object", Some(ModifiersState::CTRL)),
+        obj_prev = control(OC, None, &["←"], "previous object", None),
+        obj_next = control(OC, None, &["→"], "next object", None),
         // translation
-        move_left = control(XC, None, &["A"], "move left", Some(ModifiersState::CTRL)),
-        move_right = control(XC, None, &["D"], "move right", Some(ModifiersState::CTRL)),
-        move_up = control(YC, None, &["W"], "move up", Some(ModifiersState::CTRL)),
-        move_down = control(YC, None, &["S"], "move down", Some(ModifiersState::CTRL)),
+        move_left = control(XC, None, &["A"], "move left", None),
+        move_right = control(XC, None, &["D"], "move right", None),
+        move_up = control(YC, None, &["W"], "move up", None),
+        move_down = control(YC, None, &["S"], "move down", None),
         move_forward = control(
             &format!("{I}{ZC}"),
             None,
             &["scroll ⤉"],
             "move forward",
-            Some(ModifiersState::CTRL)
+            None
         ),
         move_backward = control(
             &format!("{I}{ZC}"),
             None,
             &["scroll ⤈"],
             "move backward",
-            Some(ModifiersState::CTRL)
+            None
         ),
         // rotation
         rotate_x_clockwise = control(XC, None, &["X"], "rotate clockwise around the X axis", None,),
@@ -284,14 +260,14 @@ pub fn help() {
             Some(ModifiersState::ALT),
             &["←"],
             "previous texture",
-            Some(ModifiersState::CTRL)
+            None
         ),
         texture_next = control(
             &format!("{BG_BLACK}{G}"),
             Some(ModifiersState::ALT),
             &["→"],
             "next texture",
-            Some(ModifiersState::CTRL)
+            None
         ),
         texture_change = control(
             &format!("{BG_BLACK}{G}"),

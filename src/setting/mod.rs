@@ -72,17 +72,17 @@ impl Default for Setting {
             textured: false,
             color_face: (
                 vec![
-                    // ColorFace {
-                    //     colors: [
-                    //         // 5 shade of gray
-                    //         [0.1, 0.1, 0.1, 1.0],
-                    //         [0.2, 0.2, 0.2, 1.0],
-                    //         [0.3, 0.3, 0.3, 1.0],
-                    //         [0.4, 0.4, 0.4, 1.0],
-                    //         [0.5, 0.5, 0.5, 1.0],
-                    //     ],
-                    //     len: 5,
-                    // },
+                    ColorFace {
+                        colors: [
+                            // 5 shade of gray
+                            [0.1, 0.1, 0.1, 1.0],
+                            [0.2, 0.2, 0.2, 1.0],
+                            [0.3, 0.3, 0.3, 1.0],
+                            [0.4, 0.4, 0.4, 1.0],
+                            [0.5, 0.5, 0.5, 1.0],
+                        ],
+                        len: 5,
+                    },
                     ColorFace {
                         colors: [
                             // 5 shade of blue-purple
