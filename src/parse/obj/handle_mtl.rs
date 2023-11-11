@@ -4,7 +4,7 @@ use super::RuleObj;
 use crate::obj::Material;
 use crate::setting::OBJ_PATH;
 
-use ansi::abbrev::{B, BLU, D, Y};
+use ansi::abbrev::{B, BLU, D, G, Y};
 use spof::SpofedFile;
 
 use std::path::PathBuf;
@@ -22,7 +22,7 @@ pub fn get_mtl(f: &SpofedFile<RuleObj>, mtl_path: &[PathBuf]) -> Result<Option<P
     if !mtl_path.contains(&path) {
         pfe!(
             f!("cannot find {B}{Y}{path}{D} for {B}{Y}{obj}{D}", path = path.display(), obj = f.path.display()),
-            h:"make sure you have a valid {B}{G}.mtl{D} file in the {G}same directory{D} as the {B}{BLU}.obj{D} file",
+            h:f!("make sure you have a valid {B}{G}.mtl{D} file in the {G}same directory{D} as the {B}{BLU}.obj{D} file"),
             f: f.path.to_string_lossy().to_string(),
             l:pl.clone().into(),
         )?;
