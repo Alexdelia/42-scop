@@ -123,7 +123,7 @@ pub fn help() {
 {obj_prev}
 {obj_next}
 
-{B}{BLU}traslation{N_C}:
+{B}{BLU}translation{N_C}:
 {move_left}
 {move_right}
 {move_up}
