@@ -9,7 +9,7 @@ use std::ops::{Mul, MulAssign};
 pub struct Matrix(pub [[VertexPrecision; 4]; 4]);
 
 impl glium::uniforms::AsUniformValue for Matrix {
-    fn as_uniform_value(&self) -> glium::uniforms::UniformValue {
+    fn as_uniform_value(&self) -> glium::uniforms::UniformValue<'_> {
         glium::uniforms::UniformValue::Mat4(self.0)
     }
 }
