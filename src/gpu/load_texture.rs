@@ -27,9 +27,8 @@ pub fn load_texture(display: &glium::Display) -> Vec<glium::texture::SrgbTexture
 
 fn empty_texture(display: &glium::Display) -> glium::texture::SrgbTexture2d {
     glium::texture::SrgbTexture2d::empty(display, 1, 1)
-        .map_err(|e| {
+        .inspect_err(|&e| {
             eprintln!("failed to create empty texture\n{e}");
-            e
         })
         .unwrap()
 }
