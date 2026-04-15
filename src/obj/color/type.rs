@@ -1,4 +1,4 @@
-use rand::Rng;
+use rand::RngExt;
 
 use super::Color;
 use crate::{Axis, Vertex, VertexPrecision};
@@ -25,12 +25,13 @@ impl ColorType {
     where
         I: IntoIterator<Item = &'a mut Vertex>,
     {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         for v in vertex {
-            v.color[0] = rng.gen();
-            v.color[1] = rng.gen();
-            v.color[2] = rng.gen();
+            let [r, g, b] = rng.random::<[f32; 3]>();
+            v.color[0] = r;
+            v.color[1] = g;
+            v.color[2] = b;
         }
     }
 

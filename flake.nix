@@ -27,12 +27,30 @@
 
         # dev shell
         devShells.default = with pkgs;
-          mkShell {
+          mkShell rec {
             buildInputs = [
-              # openssl
-              # pkg-config
+              openssl
+              pkg-config
               rustToolchain
+
+              cmake
+              fontconfig
+
+              libxkbcommon
+              libGL
+
+              # WINIT_UNIX_BACKEND=wayland
+              wayland
+
+              # WINIT_UNIX_BACKEND=x11
+              libxcursor
+              libxrandr
+              libxi
+              libx11
             ];
+
+            CMAKE_POLICY_VERSION_MINIMUM = 3.5;
+            LD_LIBRARY_PATH = "${lib.makeLibraryPath buildInputs}";
           };
       }
     );
